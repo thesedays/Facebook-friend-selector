@@ -64,8 +64,8 @@ var FBFSelector = (function(module, $) {
 		$countTotalContainer = $container.find('.fb_friends_total');
 
 		$pageContainer = $container.find('.fb_friends_paging');
-		$pageCountContainer = $pageContainer.find('.fb_friends_paging_count');
-		$pageCountTotalContainer = $pageContainer.find('.fb_friends_paging_total');
+		$pageCountContainer = $container.find('.fb_friends_paging_count');
+		$pageCountTotalContainer = $container.find('.fb_friends_paging_total');
 
 		$pagePrev = $container.find('.fb_friends_prevPage');
 		$pageNext = $container.find('.fb_friends_prevNext');
