@@ -74,7 +74,7 @@ FBFSelector.prototype.init = function(settings) {
 	if(FB) {
 		fbfs.bindEvents();
 	} else {
-		if(fbfs.debug) { console.log('FBFSelector - Init - FB not initialised'); }
+		fbfs.log('FBFSelector - Init - FB not initialised');
 		return false;
 	}
 };
@@ -108,10 +108,10 @@ FBFSelector.prototype.bindEvents = function() {
 				fbfs.show(fbfs.friends);
 			}
 
-			if(fbfs.debug) { console.log('FBFSelector - bindEvents - logged in'); }
+			fbfs.log('FBFSelector - bindEvents - logged in');
 
 		}, function() {
-			if(fbfs.debug) { console.log('FBFSelector - bindEvents - not logged in'); }
+			fbfs.log('FBFSelector - bindEvents - not logged in');
 		});
 	});
 
@@ -238,13 +238,12 @@ FBFSelector.prototype.selectFriend = function(a) {
 				rels.push(id);
 				$container.addClass('stored');
 				fbfs.$countContainer.html(rels.length);
-				if(fbfs.debug) { console.log('FBFSelector - selectFriend - selected IDs: ', rels); }
+				fbfs.log('FBFSelector - selectFriend - selected IDs: ', rels);
 				fbfs.$container.trigger('FBFSfriendSelected', [rel, id, name]);
 				if(relsLength + 1 === fbfs.amount) { fbfs.$container.trigger('FBFSAmountReached', [rel]); }
 			} else {
-				if(fbfs.debug) { console.log('FBFSelector - selectFriend - ID allready stored'); }
+				fbfs.log('FBFSelector - selectFriend - ID allready stored');
 			}
-
 
 		}
 
@@ -330,7 +329,7 @@ FBFSelector.prototype.buildFriend = function(friend) {
 	f_html = f_html.replace(/f_avatar/g, f_avatar);
 	f_html = f_html.replace(/f_name/g, f_name);
 
-	if(fbfs.debug) { console.log('FBFSelector - buildFriend - f_html: ', f_html); }
+	//fbfs.log('FBFSelector - buildFriend - f_html: ', f_html);
 
 	return f_html;
 };
@@ -348,8 +347,8 @@ FBFSelector.prototype.show = function(friendList, o){
 	wrapper = document.createDocumentFragment();
 	wrapper.innerHTML = '';
 
-	if(fbfs.debug) { console.log('FBFSelector - show - fbf: ', fbfs); }
-	if(fbfs.debug) { console.log('FBFSelector - show - friends: ', friends); }
+	fbfs.log('FBFSelector - show - fbf: ', fbfs);
+	fbfs.log('FBFSelector - show - friends: ', friends);
 
 	for(j = 0; j < pageLength; j += 1) {
 
@@ -360,16 +359,16 @@ FBFSelector.prototype.show = function(friendList, o){
 
 			if(friendID < friendsLength) {
 
-				if(fbfs.debug) { console.log('FBFSelector - show - friendID: ', friendID); }
-				if(fbfs.debug) { console.log('FBFSelector - show - Page: ', j); }
-				if(fbfs.debug) { console.log('FBFSelector - show - FriendOnPage: ', i); }
+				//fbfs.log('FBFSelector - show - friendID: ', friendID);
+				//fbfs.log('FBFSelector - show - Page: ', j);
+				//fbfs.log('FBFSelector - show - FriendOnPage: ', i);
 
 				friend = friends[friendID];
 				friend_html = fbfs.buildFriend(friend);
 				wrapper.innerHTML += friend_html;
 
-				if(fbfs.debug) { console.log('FBFSelector - show - friend: ', friend); }
-				if(fbfs.debug) { console.log('FBFSelector - show - friend_html: ', friend_html); }
+				//fbfs.log('FBFSelector - show - friend: ', friend);
+				//fbfs.log('FBFSelector - show - friend_html: ', friend_html);
 			}
 		}
 
@@ -403,12 +402,19 @@ FBFSelector.prototype.connect = function(callbackLoggedIn, callbackLoggedOut) {
 
 	FB.getLoginStatus(function(response) {
 		if(response.session) {
-			if(fbfs.debug) { console.log('FBFSelector - logged in'); }
+			fbfs.log('FBFSelector - logged in');
 			if(typeof callbackLoggedIn === 'function') { callbackLoggedIn(); }
 		} else {
-			if(fbfs.debug) { console.log('FBFSelector - not logged in'); }
+			fbfs.log('FBFSelector - not logged in');
 			if(typeof callbackLoggedOut === 'function') { callbackLoggedOut(); }
 		}
 	});
+};
+
+FBFSelector.prototype.log = function() {
+	var fbfs = this;
+	if (fbfs.debug && window.console) {
+		console.log(Array.prototype.slice.call(arguments));
+	}
 };
 
