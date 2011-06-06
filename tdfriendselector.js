@@ -332,9 +332,9 @@ var FBFSelector = (function(module, $) {
 			for (i = 0; i < settings.page; i += 1) {
 				friendID = (j * settings.page) + i;
 				if (friendID < friendsLength) {
-					//fbfs.log('FBFSelector - showSelector - friendID: ', friendID);
-					//fbfs.log('FBFSelector - showSelector - Page: ', j);
-					//fbfs.log('FBFSelector - showSelector - FriendOnPage: ', i);
+					//log('FBFSelector - showSelector - friendID: ', friendID);
+					//log('FBFSelector - showSelector - Page: ', j);
+					//log('FBFSelector - showSelector - FriendOnPage: ', i);
 					wrapper.innerHTML += buildFriend(friends[friendID]);
 				}
 			}
@@ -342,7 +342,7 @@ var FBFSelector = (function(module, $) {
 		}
 
 		$friendsContainer.html(wrapper.innerHTML);
-		$countContainer.html(friendsLength);
+		$countContainer.html(rels[rel].length);
 		$countTotalContainer.html(settings.amount);
 		$pageCountTotalContainer.html(pageLength);
 
