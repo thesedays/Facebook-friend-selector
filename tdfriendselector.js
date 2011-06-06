@@ -278,42 +278,35 @@ var FBFSelector = (function(module, $) {
 	};
 
 	buildFriend = function(friend) {
-		var f_id, f_avatar, f_name, f_link, f_html, f_rel, sclass, ids, idsLength, i, stored, _rel;
+		var f_avatar, f_html, sclass, ids, idsLength, i, stored, r;
 
-		f_rel = rel;
-		f_id = friend.id;
-		f_name = friend.name;
-		f_avatar = 'http://graph.facebook.com/' + f_id + '/picture?type=square';
-
+		f_avatar = 'http://graph.facebook.com/' + friend.id + '/picture?type=square';
 		stored = false;
-		ids = rels[f_rel];
-		idsLength = ids.length;
-
 		sclass = '';
 
-		for (_rel in rels) {
-			ids = rels[_rel];
-			idsLength = ids.length;
-
-			for (i = 0; i < idsLength; i += 1) {
-				if ('' + f_id === '' + ids[i]) {
-					stored = true;
-					sclass += ' stored';
-					if(f_rel !== _rel) { sclass += ' prestored'; }
-					if(_rel === 'bans') { sclass += ' invited'; }
+		for (r in rels) {
+			if (rels.hasOwnProperty(r)) {
+				ids = rels[r];
+				idsLength = ids.length;
+				for (i = 0; i < idsLength; i += 1) {
+					if ('' + friend.id === '' + ids[i]) {
+						stored = true;
+						sclass += ' stored';
+						if (rel !== r) { sclass += ' prestored'; }
+						if (r === 'bans') { sclass += ' invited'; }
+					}
 				}
 			}
 		}
 
 		f_html = '<li class="fb_friend clearfix' + sclass + '" data-rel="f_rel" data-id="f_id"><a href="#" class="fb_friend_link"><div class="fb_friend_avatar left"><img src="f_avatar" width="50" height="50" alt="f_name" /></div><div class="fb_friend_name left"><span>f_name</span><span class="fb_friend_select">select</span></div></a></li>';
 
-		f_html = f_html.replace(/f_rel/g, f_rel);
-		f_html = f_html.replace(/f_id/g, f_id);
+		f_html = f_html.replace(/f_rel/g, rel);
+		f_html = f_html.replace(/f_id/g, friend.id);
 		f_html = f_html.replace(/f_avatar/g, f_avatar);
-		f_html = f_html.replace(/f_name/g, f_name);
+		f_html = f_html.replace(/f_name/g, friend.name);
 
-		//fbfs.log('FBFSelector - buildFriend - f_html: ', f_html);
-
+		//log('FBFSelector - buildFriend - f_html: ', f_html);
 		return f_html;
 	};
 
