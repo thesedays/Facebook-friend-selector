@@ -2,11 +2,13 @@
 /*jslint white: false, devel: true, onevar: true, browser: true, undef: true, nomen: false, regexp: false, plusplus: true, bitwise: true, newcap: true */
 
 window.fbAsyncInit = function () {
+
 	FB.init({appId: '172102396182433', status: true, cookie: false, xfbml: false});
+
 	$(document).ready(function () {
 		var fbfs;
 
-		fbfs = new FBFSelector({debug: true});
+		fbfs = FBFSelector.init({debug: true});
 
 		$("#login_button").click(function (e) {
 			e.preventDefault();
