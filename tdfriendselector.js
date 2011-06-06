@@ -74,8 +74,8 @@ var FBFSelector = (function(module, $) {
 		$searchField = $searchContainer.find('.text');
 		$searchList = $container.find('.fb_search_list ul');
 
-		$($container).height($(document).height());
-		$($container).width($(document).width());
+		$($container).height($(window).height());
+		$($container).width($(window).width());
 
 		if (FB) {
 			bindEvents();
@@ -337,6 +337,7 @@ var FBFSelector = (function(module, $) {
 		$friendsContainer.html(wrapper.innerHTML);
 		$countContainer.html(rels[rel].length);
 		$countTotalContainer.html(settings.amount);
+		$pageCountContainer.html("1");
 		$pageCountTotalContainer.html(pageLength);
 
 		if (pageLength > 1) {
