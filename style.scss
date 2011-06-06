@@ -1,0 +1,56 @@
+@import "reset.css";
+
+/*
+	FB friends chooser
+	@author Bram Verdyck
+*/
+#fb_friends {
+	display: none; height: 100%; left: 0; position: absolute; top: 0; width: 100%; z-index: 1000; background: #b2b2b2; font-family: sans-serif;
+	.fb_friends_dialog {
+		background: #FFF; margin: 150px auto 0; padding: 1px; position: relative; width: 400px;
+		.fb_friends_close { font-size: 16px; position: absolute; right: 10px; top: 5px; }
+		form {
+			margin: 15px;
+			.fb_friends_header { color: #4c67a2; font-size: 18px; font-weight: bold; }
+			.fb_friends_search { background: #f1f1f1; border: 1px solid #cacaca; border-width: 1px 0; margin-top: 10px; padding: 10px; text-align: right; width: 350px; }
+			.text { border: 1px solid #4c67a2; font: 12px/normal "Lucida Sans Unicode", "Lucida Grande", sans-serif; padding: 3px 5px; }
+			.submit_button { display: none; }
+			.fb_friends_list {
+				margin-top: 10px;
+				.fb_friend {
+					padding: 5px 10px; border-bottom: 1px solid #cacaca;
+					a:hover .fb_friend_name .fb_friend_select { display: block; }
+					&.stored { background: #f0f0f0; }
+					&.prestored { opacity: .5; filter: alpha(opacity=50); -ms-filter: "progid: DXImageTransform.Microsoft.Alpha(Opacity=50)"; }
+					&.prestored a { cursor: default; }
+					&.prestored a:hover .fb_friend_name .fb_friend_select { display: none; }
+					.fb_friend_link { cursor: pointer; }
+					.fb_friend_name { display: inline-block; font-size: 14px; font-weight: bold; padding: 17px 20px; position: relative; width: 260px; }
+					.fb_friend_name .fb_friend_select { color: #666; display: none; font-size: 10px; font-weight: normal; position: absolute; right: 10px; top: 19px; }
+				}
+			}
+			.fb_friends_paging {
+				padding: 10px 0;
+				.right {
+					width: 200px;
+					ul { float: right; }
+					li {
+						display: inline;
+						a { background: #e2e4e4; border: 1px solid #979797; display: block; float: left; padding: 10px; position: relative; }
+						a.fb_friends_prevNext { background: url(images/fb_dialog_next.png) no-repeat center center scroll; }
+						a.fb_friends_prevPage { background: url(images/fb_dialog_previous.png) no-repeat center center scroll; }
+						a span { position: absolute; left: -9000px; }
+						a.disabled { background: #f1f1f1; border: 1px solid #c6c6c6; }
+						a.fb_friends_prevNext.disabled { background: url(images/fb_dialog_next_disabled.png) no-repeat center center scroll; }
+						a.fb_friends_prevPage.disabled { background: url(images/fb_dialog_previous_disabled.png) no-repeat center center scroll; }
+					}
+				}
+			}
+			.fb_friends_buttons {
+				margin-top: 10px;
+				.fb_friends_ok a { background: #4c67a2; color: #FFF; padding: 5px 20px; text-transform: uppercase; display: block; }
+			}
+		}
+	}
+}
+

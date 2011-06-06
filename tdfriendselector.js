@@ -1,16 +1,15 @@
-/*globals $, FB */
-/*jslint white: false, onevar: true, browser: true, undef: true, nomen: false, regexp: false, plusplus: true, bitwise: true, newcap: true */
-(function(window, document, $, undefined) {
-
+/*globals $, jQuery, FB */
+/*jslint white: false, devel: true, onevar: true, browser: true, undef: true, nomen: false, regexp: false, plusplus: true, bitwise: true, newcap: true */
 
 /*
 var settings = {
-	container:		'#fb_friends',
-	button:			'.social_box_chooseFriends',
-	speed:			500,
-	amount:			4,
-	page:			5,
-	debug:			false
+	containerSelector : '#fb_friends',
+	buttonSelector    : '.social_box_chooseFriends',
+	speed             : 500,
+	amount            : 4,
+	debug             : false,
+	page              : 10,
+	disabled          : 'disabled'
 };
 
 var bans = [];
@@ -32,21 +31,24 @@ var FBFSelector = function(settings) { this.init(settings); };
 
 FBFSelector.prototype.init = function(settings) {
 
-	var container, button, speed, amount, debug, fbfs, page, disabled;
+	var defaults, fbfs;
+
+	defaults = {
+		containerSelector : '#fb_friends',
+		buttonSelector    : '.social_box_chooseFriends',
+		speed             : 500,
+		amount            : 4,
+		debug             : false,
+		page              : 10,
+		disabled          : 'disabled'
+	};
 
 	fbfs = this;
+	$.extend(defaults, settings);
+	$.extend(fbfs, defaults);
 
-	container = settings.container || '#fb_friends';
-	button = settings.button || '.social_box_chooseFriends';
-
-	speed = settings.speed || 500;
-	amount = settings.amount || 4;
-	debug = settings.debug || false;
-	page = settings.page || 10;
-	disabled = settings.disabled || 'disabled';
-
-	fbfs.$container = $(container);
-	fbfs.$button = $(button);
+	fbfs.$container = $(defaults.containerSelector);
+	fbfs.$button = $(defaults.buttonSelector);
 	fbfs.$friendsContainer = fbfs.$container.find('.fb_friends_list ul');
 	fbfs.$countContainer = fbfs.$container.find('.fb_friends_count');
 	fbfs.$countTotalContainer = fbfs.$container.find('.fb_friends_total');
@@ -62,15 +64,8 @@ FBFSelector.prototype.init = function(settings) {
 	fbfs.$searchField = fbfs.$searchContainer.find('.text');
 	fbfs.$searchList = fbfs.$container.find('.fb_search_list ul');
 
-	fbfs.speed = speed;
-	fbfs.amount = amount;
-	fbfs.page = page;
 	fbfs.friends = [];
-	fbfs.disabled = disabled;
-
-	fbfs.debug = debug;
 	fbfs.rel = '';
-
 	fbfs.rels = {};
 
 	$(fbfs.$container).height($(document).height());
@@ -82,8 +77,8 @@ FBFSelector.prototype.init = function(settings) {
 		if(fbfs.debug) { console.log('FBFSelector - Init - FB not initialised'); }
 		return false;
 	}
-
 };
+
 FBFSelector.prototype.bindEvents = function() {
 	var fbfs = this;
 
@@ -416,6 +411,4 @@ FBFSelector.prototype.connect = function(callbackLoggedIn, callbackLoggedOut) {
 		}
 	});
 };
-
-}(window, window.document, jQuery));
 

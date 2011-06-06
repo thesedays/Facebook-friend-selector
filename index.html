@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Facebook Friend Selector</title>
+		<link rel="stylesheet" href="style.css" /><!-- Style source: style.scss -->
+	</head>
+	<body>
+		<div id="fb-root"></div>
+
+		<ul>
+			<li><a href="#" id="login_button">Login</a></li>
+			<li><a href="#" class="social_box_chooseFriends" rel="selector1">Select friends</a></li>
+		</ul>
+
+		<div class="fb_friends" id="fb_friends">
+			<div class="fb_friends_dialog">
+				<div class="fb_friends_close"><a href="#">x</a></div>
+				<form action="" method="post" name="fb_friends_form" id="fb_friends_form">
+					<div class="fb_friends_content">
+						<div class="fb_friends_header">
+							<p>Friends</p>
+						</div>
+						<div class="fb_friends_copy">
+							<p>Lorem ipsum hier kan ook tekst</p>
+						</div>
+						<div class="fb_friends_search clearfix">
+							<div class="fb_friends_count_container left">
+								<p><span class="fb_friends_count">0</span> / <span class="fb_friends_total">0</span> friends selected</p>
+							</div>
+							<!--<div class="fb_friends_search_form right">
+								<input type="text" value="Search friends" class="text" />
+									<a href="#" class="submit_link"><span>Search</span></a>
+								<input type="submit" value="search" class="submit_button" />
+							</div>-->
+						</div>
+						<div class="fb_friends_list" data-select="selecteer">
+							<ul></ul>
+						</div>
+						<div class="fb_friends_paging clearfix">
+							<div class="left">
+								Page <span class="fb_friends_paging_count">1</span> / <span class="fb_friends_paging_total">1</span>
+							</div>
+							<div class="right">
+								<ul>
+									<li><a href="#" class="fb_friends_prevPage disabled"><span>Previous</span></a></li>
+									<li><a href="#" class="fb_friends_prevNext"><span>Next</span></a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="fb_friends_buttons clearfix">
+							<div class="right fb_friends_ok">
+								<a href="#">OK</a>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+		<script src="tdfriendselector.js"></script>
+		<script src="example.js"></script>
+	</body>
+</html>
+
