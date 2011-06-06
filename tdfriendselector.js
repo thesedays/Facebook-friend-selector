@@ -34,8 +34,8 @@ var FBFSelector = (function(module, $) {
 
 	// Private members
 	getFriends, search, ban, removeFriend, selectFriend,
-	connect, bindEvents, resize, log, show, hide, sortFriends, buildFriend,
-	settings, friends = [], rel = '', rels = {},
+	connect, bindEvents, resize, log, showSelector, hideSelector, sortFriends, buildFriend,
+	settings, friends, rel = '', rels = {},
 	$container, $button, $friendsContainer, $countContainer, $countTotalContainer, $pageContainer, $pageCountContainer, $pageCountTotalContainer, $pagePrev, $pageNext, $searchContainer, $searchField, $searchList;
 
 	// Initialise the plugin
@@ -103,33 +103,22 @@ var FBFSelector = (function(module, $) {
 
 			if (!rels[rel]) { rels[rel] = []; }
 
-			// check if logged in
-			// callback1 = logged in callback
-			// callback2 = logged out callback
-			connect(function() {
-				if(friends.length <= 0) {
-
-					// get friends with FB.api
-					// callback when loading of friends is completed
-					getFriends(show);
-				} else {
-
-					// if friends already stored, don't load again
-					// show dialog
-					show();
-				}
-
-				log('FBFSelector - bindEvents - logged in');
-
-			}, function() {
-				log('FBFSelector - bindEvents - not logged in');
-			});
+			if (friends) {
+				showSelector();
+			} else {
+				// Load the friends if we are logged in
+				connect(function() {
+					getFriends(showSelector);
+				}, function() {
+					log('FBFSelector - bindEvents - not logged in');
+				});
+			}
 		});
 
 		$container.find('.fb_friends_close, .fb_friends_ok').bind('click', function(e) {
 			e.preventDefault();
 			rel = '';
-			hide();
+			hideSelector();
 		});
 
 		$friendsContainer.find('a').live('click', function(e) {
@@ -269,17 +258,16 @@ var FBFSelector = (function(module, $) {
 	};
 
 	getFriends = function(callback) {
-		if (friends.length <= 0) {
+		if (!friends) {
 			FB.api('/me/friends?fields=id,name', function(response) {
 				if (response.data) {
 					friends = response.data.slice();
 					friends = friends.sort(sortFriends);
-					if(typeof callback === 'function') { callback(friends); }
+					if (typeof callback === 'function') { callback(); }
 				}
 			});
 		} else {
-			friends = friends.sort(sortFriends);
-			if (typeof callback === 'function') { callback(friends); }
+			if (typeof callback === 'function') { callback(); }
 		}
 	};
 
@@ -329,65 +317,44 @@ var FBFSelector = (function(module, $) {
 		return f_html;
 	};
 
-	show = function(friendList){
-		var _friends, friendsLength, i, wrapper, friend, friend_html, pageLength, j, friendID, dataRel;
+	showSelector = function() {
+		var friendsLength, i, wrapper, pageLength, j, friendID;
 
-		_friends = friendList.slice();
-		friendsLength = _friends.length;
-
+		friendsLength = friends.length;
 		pageLength = Math.ceil(friendsLength / settings.page);
-
 		wrapper = document.createDocumentFragment();
 		wrapper.innerHTML = '';
 
-		log('FBFSelector - show - friends: ', _friends);
+		log('FBFSelector - showSelector - friends: ', friends);
 
 		for (j = 0; j < pageLength; j += 1) {
-
-			wrapper.innerHTML += '<li class="fb_friend_page" rel="' + j + '"><ul>';
-
+			wrapper.innerHTML += '<li class="fb_friend_page" rel="' + j + '"' + (j > 0 ? ' style="display: none;"' : '') + '><ul>';
 			for (i = 0; i < settings.page; i += 1) {
 				friendID = (j * settings.page) + i;
-
 				if (friendID < friendsLength) {
-
-					//fbfs.log('FBFSelector - show - friendID: ', friendID);
-					//fbfs.log('FBFSelector - show - Page: ', j);
-					//fbfs.log('FBFSelector - show - FriendOnPage: ', i);
-
-					friend = friends[friendID];
-					friend_html = buildFriend(friend);
-					wrapper.innerHTML += friend_html;
-
-					//fbfs.log('FBFSelector - show - friend: ', friend);
-					//fbfs.log('FBFSelector - show - friend_html: ', friend_html);
+					//fbfs.log('FBFSelector - showSelector - friendID: ', friendID);
+					//fbfs.log('FBFSelector - showSelector - Page: ', j);
+					//fbfs.log('FBFSelector - showSelector - FriendOnPage: ', i);
+					wrapper.innerHTML += buildFriend(friends[friendID]);
 				}
 			}
-
 			wrapper.innerHTML += '</ul></li>';
 		}
 
 		$friendsContainer.html(wrapper.innerHTML);
+		$countContainer.html(friendsLength);
+		$countTotalContainer.html(settings.amount);
+		$pageCountTotalContainer.html(pageLength);
 
-		dataRel = $container.find('.fb_friend').attr('data-rel');
-
-		//fbfs.$countContainer.html(fbfs.$container.find('.stored').length);
 		if (pageLength > 1) {
 			$pageContainer.show();
 		} else {
 			$pageContainer.hide();
 		}
-
-		//fbfs.$pageCountContainer.html(pageLength);
-		$countContainer.html(rels[dataRel].length);
-		$countTotalContainer.html(settings.amount);
-
-		$pageCountTotalContainer.html(pageLength);
-		$friendsContainer.find('.fb_friend_page:gt(0)').hide();
-
 		$container.fadeIn(500);
 	};
-	hide = function() {
+
+	hideSelector = function() {
 		$container.fadeOut(500);
 	};
 
