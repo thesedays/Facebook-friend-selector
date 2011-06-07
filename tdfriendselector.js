@@ -15,11 +15,7 @@ var settings = {
 var bans = [];
 */
 
-// var fbd = new FBFSelector();
-// fbd.init(settings);
-// fbd.removeFriend(rel, fbid, name, callback);
-// fbd.getSelectedFriends();
-// fbd.ban(bans);
+
 
 
 /*
@@ -30,12 +26,12 @@ var bans = [];
 var FBFSelector = (function(module, $) {
 
 	// Public members (will be added to module as properties and returned)
-	var init, getSelectedFriends,
+	var init, getselectedFriendIds,
 
 	// Private members
-	getFriends, search, ban, removeFriend, selectFriend,
+	getFriends, search, disableFriends, selectFriend,
 	connect, bindEvents, log, showSelector, hideSelector, sortFriends, buildFriend,
-	settings, friends, rel = '', rels = {},
+	settings, friends, selectedFriendIds = [], disabledFriendIds = [],
 	$container, $button, $friendsContainer, $countContainer, $countTotalContainer, $pageContainer, $pageCountContainer, $pageCountTotalContainer, $pagePrev, $pageNext, $searchContainer, $searchField, $searchList;
 
 	// Initialise the plugin
@@ -88,11 +84,8 @@ var FBFSelector = (function(module, $) {
 
 		$button.bind('click', function(e) {
 			e.preventDefault();
-			rel = $(this).attr('rel');
 
 			if ($(this).hasClass(settings.disabledClass)) { return false; }
-
-			if (!rels[rel]) { rels[rel] = []; }
 
 			if (friends) {
 				showSelector();
@@ -108,7 +101,6 @@ var FBFSelector = (function(module, $) {
 
 		$container.find('.tdfriendselector_close, .tdfriendselector_ok').bind('click', function(e) {
 			e.preventDefault();
-			rel = '';
 			hideSelector();
 		});
 
@@ -144,101 +136,53 @@ var FBFSelector = (function(module, $) {
 			$pagePrev.removeClass(settings.disabledClass);
 		});
 
-		//$searchField.bind('keyup', function() { search($(this).val()); });
 	};
 
-	ban = function(banList) {
-		if (typeof banList === 'object') { rels.bans = banList.slice(); }
+	disableFriends = function(input) {
+		disabledFriendIds = input;
 	};
-
-	/*search = function(value) {
-		var text;
-
-		$searchList.html('');
-		$searchList.show();
-
-		if (value) {
-			$friendsContainer.hide();
-			$friendsContainer.find('li').each(function() {
-				text = $(this).find('.fb_friend_name span:first').text();
-				if (text.indexOf(value) >= 0) {}
-			});
-		} else {
-			$friendsContainer.show();
-			$searchList.hide();
-		}
-	};*/
 
 	/**
 	 * Get the selected friends
-	 * @param rel Limit the results to one specific instance
 	 */
-	getSelectedFriends = function(rel) {
-		if (rel) {
-			return rels[rel];
-		} else {
-			return rels;
-		}
+	getselectedFriendIds = function() {
+		return selectedFriendIds;
 	};
 
-	removeFriend = function(rel, id, name, callback) {
-		var len, i;
-		if (rels[rel]) {
-			for (i = 0, len = rels[rel].length; i < len; i += 1) {
-				if (rels[rel][i] === id) {
-					rels[rel].splice(i, 1);
-					if (typeof callback === 'function') { callback(); }
-					return false;
-				}
-			}
-		}
-	};
+	selectFriend = function($friend) {
+		var friendId, i, len, name;
 
-	selectFriend = function(a) {
-		var $container, rel, id, i, name, len, store, count;
+		friendId = $friend.attr('data-id');
+		name = $friend.find('.tdfriendselector_friendName span:first').text();
 
-		$container = a;
-		rel = $container.attr('data-rel');
-		id = $container.attr('data-id');
-		name = $container.find('.tdfriendselector_friendName span:first').text();
-		len = rels[rel].length;
-
-		if (!rels[rel]) { rels[rel] = []; }
-
-		if (!$container.hasClass('tdfriendselector_friendSelected')) {
-			store = true;
-
-			if (len < settings.maxSelection) {
-				for (i = 0; i < len; i += 1) {
-					if (rels[rel][i] === id) { store = false; }
-				}
-
-				if (store) {
-					rels[rel].push(id);
-					$container.addClass('tdfriendselector_friendSelected');
-					$countContainer.html(rels[rel].length);
-					log('FBFSelector - selectFriend - selected IDs: ', rels[rel]);
-					$container.trigger('FBFSfriendSelected', [rel, id, name]);
-					if (len + 1 === settings.maxSelection) { $container.trigger('FBFSAmountReached', [rel]); }
+		if (!$friend.hasClass('tdfriendselector_friendSelected')) {
+			if (selectedFriendIds.length < settings.maxSelection) {
+				// Add friend to selectedFriendIds
+				if ($.inArray(friendId, selectedFriendIds) === -1) {
+					selectedFriendIds.push(friendId);
+					$friend.addClass('tdfriendselector_friendSelected');
+					$countContainer.html(selectedFriendIds.length);
+					log('FBFSelector - selectFriend - selected IDs: ', selectedFriendIds);
+					$friend.trigger('FBFSfriendSelected', [friendId, name]);
 				} else {
 					log('FBFSelector - selectFriend - ID already stored');
 				}
 			}
 
 		} else {
-
-			for (i = 0; i < len; i += 1) {
-				if(rels[rel][i] === id) {
-					rels[rel].splice(i, 1);
-					$container.removeClass('tdfriendselector_friendSelected');
-					$countContainer.html(rels[rel].length);
-					$container.trigger('FBFSfriendUnSelected', [rel, id, name]);
+			// Remove friend from selectedFriendIds
+			for (i = 0, len = selectedFriendIds.length; i < len; i += 1) {
+				if (selectedFriendIds[i] === friendId) {
+					selectedFriendIds.splice(i, 1);
+					$friend.removeClass('tdfriendselector_friendSelected');
+					$countContainer.html(selectedFriendIds.length);
+					$friend.trigger('FBFSfriendUnSelected', [friendId, name]);
 					return false;
 				}
 			}
 		}
 
-		if (len === settings.maxSelection) { $container.trigger('FBFSAmountReached', [rel]); }
+		if (selectedFriendIds.length === settings.maxSelection) { $friend.trigger('FBFSAmountReached', []); }
 	};
 
 	getFriends = function(callback) {
@@ -262,37 +206,25 @@ var FBFSelector = (function(module, $) {
 	};
 
 	buildFriend = function(friend) {
-		var f_avatar, f_html, sclass, ids, idsLength, i, stored, r;
+		var html, sclass = 'tdfriendselector_friend tdfriendselector_clearfix';
 
-		f_avatar = 'http://graph.facebook.com/' + friend.id + '/picture?type=square';
-		stored = false;
-		sclass = '';
-
-		for (r in rels) {
-			if (rels.hasOwnProperty(r)) {
-				ids = rels[r];
-				idsLength = ids.length;
-				for (i = 0; i < idsLength; i += 1) {
-					if ('' + friend.id === '' + ids[i]) {
-						stored = true;
-						sclass += ' tdfriendselector_friendSelected';
-						if (rel !== r) { sclass += ' tdfriendselector_friendDisabled'; }
-						if (r === 'bans') { sclass += ' tdfriendselector_invited'; }
-					}
-				}
-			}
+		// Add selected/disabled classnames if they apply to this friend
+		if ($.inArray(friend.id, selectedFriendIds) !== -1) {
+			sclass += ' tdfriendselector_friendSelected';
+		}
+		if ($.inArray(friend.id, disabledFriendIds) !== -1) {
+			sclass += ' tdfriendselector_friendDisabled';
 		}
 
-		f_html = '<a href="#" class="tdfriendselector_friend tdfriendselector_clearfix' + sclass + '" data-rel="' + rel + '" data-id="' + friend.id + '">' +
-				'<img src="' + f_avatar + '" width="50" height="50" alt="' + friend.name + '" class="tdfriendselector_friendAvatar" />' +
+		html = '<a href="#" class="' + sclass + '" data-id="' + friend.id + '">' +
+				'<img src="http://graph.facebook.com/' + friend.id + '/picture?type=square" width="50" height="50" alt="' + friend.name + '" class="tdfriendselector_friendAvatar" />' +
 				'<div class="tdfriendselector_friendName">' + 
 					'<span>' + friend.name + '</span>' +
 					'<span class="tdfriendselector_friendSelect">select</span>' +
 				'</div>' +
 			'</a>';
 
-		//log('FBFSelector - buildFriend - f_html: ', f_html);
-		return f_html;
+		return html;
 	};
 
 	showSelector = function() {
@@ -320,7 +252,7 @@ var FBFSelector = (function(module, $) {
 		}
 
 		$friendsContainer.html(wrapper.innerHTML);
-		$countContainer.html(rels[rel].length);
+		$countContainer.html(selectedFriendIds.length);
 		$countTotalContainer.html(settings.maxSelection);
 		$pageCountContainer.html("1");
 		$pageCountTotalContainer.html(pageLength);
@@ -357,7 +289,7 @@ var FBFSelector = (function(module, $) {
 
 	module = {
 		init: init,
-		getSelectedFriends : getSelectedFriends
+		getselectedFriendIds : getselectedFriendIds
 	};
 	return module;
 
