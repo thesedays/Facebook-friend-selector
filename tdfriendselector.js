@@ -73,7 +73,7 @@ var TDFriendSelector = (function(module, $) {
 		var i, len;
 		input = Array.prototype.slice.call(input);
 		for (i = 0, len = input.length; i < len; i += 1) {
-			input[i].sortName = input[i].name.toUpperCase();
+			input[i].upperCaseName = input[i].name.toUpperCase();
 		}
 		input = input.sort(sortFriends);
 		friends = input;
@@ -189,7 +189,7 @@ var TDFriendSelector = (function(module, $) {
 			if (filter.length > 2) {
 				filter = filter.toUpperCase();
 				for (i = 0, len = friends.length; i < len; i += 1) {
-					if (friends[i].sortName.indexOf(filter) === -1) {
+					if (friends[i].upperCaseName.indexOf(filter) === -1) {
 						$($friends[i]).addClass(settings.friendFilteredClass);
 						numFilteredFriends += 1;
 					}
@@ -212,6 +212,7 @@ var TDFriendSelector = (function(module, $) {
 			$buttonOK.bind('click', function(e) {
 				e.preventDefault();
 				hideFriendSelector();
+				$container.trigger('TDFriendSelector_submit', [selectedFriendIds]);
 			});
 
 			$friends.bind('click', function(e) {
@@ -291,13 +292,13 @@ var TDFriendSelector = (function(module, $) {
 						selectedFriendIds.splice(i, 1);
 						$friend.removeClass(settings.friendSelectedClass);
 						$selectedCount.html(selectedFriendIds.length);
-						$friend.trigger('TDFriendSelector_friendUnselected', [friendId, name]);
+						$friend.trigger('TDFriendSelector_friendUnselected', [friendId]);
 						return false;
 					}
 				}
 			}
 
-			if (selectedFriendIds.length === settings.maxSelection) { $friend.trigger('TDFriendSelector_AmountReached', []); }
+			if (selectedFriendIds.length === instanceSettings.maxSelection) { $friend.trigger('TDFriendSelector_amountReached'); }
 		};
 
 		// Return an object with access to the public members
@@ -371,9 +372,9 @@ var TDFriendSelector = (function(module, $) {
 	};
 
 	sortFriends = function(friend1, friend2) {
-		if (friend1.sortName === friend2.sortName) { return 0; }
-		if (friend1.sortName > friend2.sortName) { return 1; }
-		if (friend1.sortName < friend2.sortName) { return -1; }
+		if (friend1.upperCaseName === friend2.upperCaseName) { return 0; }
+		if (friend1.upperCaseName > friend2.upperCaseName) { return 1; }
+		if (friend1.upperCaseName < friend2.upperCaseName) { return -1; }
 	};
 
 	log = function() {

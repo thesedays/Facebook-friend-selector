@@ -39,6 +39,34 @@ window.fbAsyncInit = function () {
 			selector2.showFriendSelector();
 		});
 
+		$("#TDFriendSelector").bind("TDFriendSelector_friendSelected", function (e, friendId) {
+			var result, friend, name, currentDate = new Date();
+			friend = TDFriendSelector.getFriendById(friendId);
+			name = friend.name;
+			result = $('<div>' + currentDate + ' - Selected ' + name + ' (ID: ' + friendId + ')</div>');
+			$("#results").append(result);
+		});
+
+		$("#TDFriendSelector").bind("TDFriendSelector_friendUnselected", function (e, friendId) {
+			var result, friend, name, currentDate = new Date();
+			friend = TDFriendSelector.getFriendById(friendId);
+			name = friend.name;
+			result = $('<div>' + currentDate + ' - Unselected ' + name + ' (ID: ' + friendId + ')</div>');
+			$("#results").append(result);
+		});
+
+		$("#TDFriendSelector").bind("TDFriendSelector_amountReached", function (e, friendId) {
+			var result, currentDate = new Date();
+			result = $('<div>' + currentDate + ' - Selected the maximum number of friends</div>');
+			$("#results").append(result);
+		});
+
+		$("#TDFriendSelector").bind("TDFriendSelector_submit", function (e, friendIds) {
+			var selectedFriendIds, currentDate = new Date();
+			result = $('<div>' + currentDate + ' - Clicked OK with the following friends selected: ' + friendIds.join(", ") + '</div>');
+			$("#results").append(result);
+		});
+
 	});
 };
 (function () {
