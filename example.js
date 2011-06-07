@@ -10,7 +10,7 @@ window.fbAsyncInit = function () {
 
 		TDFriendSelector.init({debug: true});
 
-		selector1 = TDFriendSelector.newInstance({maxSelection: 4, friendsPerPage: 10});
+		selector1 = TDFriendSelector.newInstance();
 		selector2 = TDFriendSelector.newInstance({maxSelection: 2, friendsPerPage: 5});
 
 		$("#btnLogin").click(function (e) {
@@ -22,6 +22,11 @@ window.fbAsyncInit = function () {
 					console.log("Not logged in");
 				}
 			}, {});
+		});
+
+		$("#btnLogout").click(function (e) {
+			e.preventDefault();
+			FB.logout();
 		});
 
 		$("#btnSelect1").click(function (e) {

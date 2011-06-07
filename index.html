@@ -2,22 +2,32 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Facebook Friend Selector</title>
+		<title>These Days Friend Selector</title>
+		<style>
+			body { font-family: sans-serif; }
+		</style>
 		<link rel="stylesheet" href="style.css" /><!-- Style source: style.scss -->
 	</head>
 	<body>
 		<div id="fb-root"></div>
 
+		<h1>These Days Friend Selector</h1>
+
+		<h2>Example</h2>
 		<ul>
-			<li><a href="#" id="btnLogin">Login</a></li>
-			<li><a href="#" id="btnSelect1">Select friends</a></li>
-			<li><a href="#" id="btnSelect2">Select more friends</a></li>
+			<li><a href="#" id="btnLogin">Login with Facebook</a></li>
+			<li><a href="#" id="btnLogout">Log out</a></li>
+			<li><a href="#" id="btnSelect1">Select friends</a> (This won't work until you log in)</li>
+			<li><a href="#" id="btnSelect2">Select friends in a seperate instance with different options</a> (This won't work until you log in)</li>
 		</ul>
 
+		<h2>How to implement</h2>
+
+		<!-- Markup for These Days Friend Selector -->
 		<div id="tdfriendselector">
 			<div class="tdfriendselector_dialog">
 				<a href="#" id="tdfriendselector_buttonClose">x</a>
-				<form action="" method="post" class="tdfriendselector_form">
+				<div class="tdfriendselector_form">
 					<div class="tdfriendselector_header">
 						<p>Select your friends</p>
 					</div>
@@ -39,9 +49,10 @@
 						</div>
 						<a href="#" id="tdfriendselector_buttonOK">OK</a>
 					</div>
-				</form>
+				</div>
 			</div>
 		</div>
+
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
 		<script src="tdfriendselector.js"></script>
 		<script src="example.js"></script>

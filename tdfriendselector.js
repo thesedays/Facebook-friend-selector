@@ -155,6 +155,7 @@ var TDFriendSelector = (function(module, $) {
 				// Update paging
 				$friendsMask.height(instanceSettings.friendsPerPage * instanceSettings.friendHeight);
 				$friendsContainer.css({top: 0});
+				$selectedCount.html(selectedFriendIds.length);
 				$selectedCountMax.html(instanceSettings.maxSelection);
 				updatePaginationButtons(1);
 				$container.fadeIn(500);
