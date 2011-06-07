@@ -62,8 +62,9 @@
 		}
 		.tdfriendselector_footer {
 			padding: 8px 10px; background: #F2F2F2; border-top: 1px solid #CCC;
-			#tdfriendselector_pagePrev, #tdfriendselector_pageNext { float: left; height: 21px; width: 22px; margin-right: 6px; overflow: hidden; text-indent: -999em; background: transparent url(tdfriendselector.png) no-repeat 0 0; }
-			#tdfriendselector_pagePrev { background-position: -44px 0; }
+			#tdfriendselector_pagePrev, #tdfriendselector_pageNext { float: left; height: 21px; width: 22px; overflow: hidden; text-indent: -999em; background: transparent url(tdfriendselector.png) no-repeat 0 0; }
+			#tdfriendselector_pagePrev { background-position: -44px 0; margin-right: 2px; }
+			#tdfriendselector_pageNext { margin-right: 6px; }
 			#tdfriendselector_pagePrev.tdfriendselector_disabled { background-position: -66px 0; }
 			#tdfriendselector_pageNext.tdfriendselector_disabled { background-position: -22px 0; }
 			.tdfriendselector_pageNumberContainer { float: left; padding: 4px 0 0; }
