@@ -30,22 +30,22 @@ var TDFriendSelector = (function(module, $) {
 		settings = {
 			speed                    : 500,
 			debug                    : false,
-			disabledClass            : 'tdfriendselector_disabled',
-			friendSelectedClass      : 'tdfriendselector_friendSelected',
-			friendDisabledClass      : 'tdfriendselector_friendDisabled',
-			friendFilteredClass      : 'tdfriendselector_friendFiltered',
-			containerSelector        : '#tdfriendselector',
-			friendsMaskSelector      : '.tdfriendselector_friendsMask',
-			friendsContainerSelector : '.tdfriendselector_friendsContainer',
-			searchFieldSelector      : '#tdfriendselector_searchField',
-			selectedCountSelector    : '.tdfriendselector_selectedCount',
-			selectedCountMaxSelector : '.tdfriendselector_selectedCountMax',
-			pageNumberSelector       : '#tdfriendselector_pageNumber',
-			pageNumberTotalSelector  : '#tdfriendselector_pageNumberTotal',
-			pagePrevSelector         : '#tdfriendselector_pagePrev',
-			pageNextSelector         : '#tdfriendselector_pageNext',
-			buttonCloseSelector      : '#tdfriendselector_buttonClose',
-			buttonOKSelector         : '#tdfriendselector_buttonOK'
+			disabledClass            : 'TDFriendSelector_disabled',
+			friendSelectedClass      : 'TDFriendSelector_friendSelected',
+			friendDisabledClass      : 'TDFriendSelector_friendDisabled',
+			friendFilteredClass      : 'TDFriendSelector_friendFiltered',
+			containerSelector        : '#TDFriendSelector',
+			friendsMaskSelector      : '.TDFriendSelector_friendsMask',
+			friendsContainerSelector : '.TDFriendSelector_friendsContainer',
+			searchFieldSelector      : '#TDFriendSelector_searchField',
+			selectedCountSelector    : '.TDFriendSelector_selectedCount',
+			selectedCountMaxSelector : '.TDFriendSelector_selectedCountMax',
+			pageNumberSelector       : '#TDFriendSelector_pageNumber',
+			pageNumberTotalSelector  : '#TDFriendSelector_pageNumberTotal',
+			pagePrevSelector         : '#TDFriendSelector_pagePrev',
+			pageNextSelector         : '#TDFriendSelector_pageNext',
+			buttonCloseSelector      : '#TDFriendSelector_buttonClose',
+			buttonOKSelector         : '#TDFriendSelector_buttonOK'
 		};
 
 		// Override defaults with arguments
@@ -360,11 +360,11 @@ var TDFriendSelector = (function(module, $) {
 
 		// Return the markup for a single friend
 		buildFriendMarkup = function(friend) {
-			return '<a href="#" class="tdfriendselector_friend tdfriendselector_clearfix" data-id="' + friend.id + '">' +
-					'<img src="http://graph.facebook.com/' + friend.id + '/picture?type=square" width="50" height="50" alt="' + friend.name + '" class="tdfriendselector_friendAvatar" />' +
-					'<div class="tdfriendselector_friendName">' + 
+			return '<a href="#" class="TDFriendSelector_friend TDFriendSelector_clearfix" data-id="' + friend.id + '">' +
+					'<img src="http://graph.facebook.com/' + friend.id + '/picture?type=square" width="50" height="50" alt="' + friend.name + '" class="TDFriendSelector_friendAvatar" />' +
+					'<div class="TDFriendSelector_friendName">' + 
 						'<span>' + friend.name + '</span>' +
-						'<span class="tdfriendselector_friendSelect">select</span>' +
+						'<span class="TDFriendSelector_friendSelect">select</span>' +
 					'</div>' +
 				'</a>';
 		};

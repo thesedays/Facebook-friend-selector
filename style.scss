@@ -9,7 +9,7 @@
  * TD Friend Selector
  * @author Bram Verdyck, Keegan Street
  */
-#tdfriendselector {
+#TDFriendSelector {
 	$friendWidth: 370px;
 	/* Common styles */
 	display: none; width: 100%; padding: 10px 0 0; position: absolute; left: 0; top: 0; z-index: 1000; color: #333; font-family: "lucida grande", tahoma, verdana, arial, sans-serif; font-size: 11px;
@@ -18,57 +18,57 @@
 	li { list-style-type: none; }
 
 	/* Clearfix */
-	.tdfriendselector_clearfix:before, .tdfriendselector_clearfix:after { content: ""; display: table; }
-	.tdfriendselector_clearfix:after { clear: both; }
-	.tdfriendselector_clearfix { zoom: 1; }
+	.TDFriendSelector_clearfix:before, .TDFriendSelector_clearfix:after { content: ""; display: table; }
+	.TDFriendSelector_clearfix:after { clear: both; }
+	.TDFriendSelector_clearfix { zoom: 1; }
 
 	/* The interface */
-	.tdfriendselector_dialog {
+	.TDFriendSelector_dialog {
 		width: $friendWidth + 22; padding: 10px; margin: 0 auto; position: relative; background: rgba(82, 82, 82, 0.7); @include borderRadius(8px);
-		#tdfriendselector_buttonClose {
+		#TDFriendSelector_buttonClose {
 			position: absolute; right: 18px; top: 15px; font-size: 16px;
 			&, &:active, &:hover, &:visited { color: #FFF; }
 		}
-		.tdfriendselector_form { border: 1px solid #3B5998; }
-		.tdfriendselector_header { padding: 7px 10px; background: #6D84B4; color: #FFF; font-size: 14px; font-weight: bold; }
-		.tdfriendselector_content { background: #FFF; padding: 10px; }
-		.tdfriendselector_searchContainer {
+		.TDFriendSelector_form { border: 1px solid #3B5998; }
+		.TDFriendSelector_header { padding: 7px 10px; background: #6D84B4; color: #FFF; font-size: 14px; font-weight: bold; }
+		.TDFriendSelector_content { background: #FFF; padding: 10px; }
+		.TDFriendSelector_searchContainer {
 			margin-top: 10px; padding: 10px; background: #f1f1f1; border: solid #cacaca; border-width: 1px 0;
-			.tdfriendselector_selectedCountContainer { font-weight: bold; float: left; padding: 3px 0; }
-			#tdfriendselector_searchField { float: right; }
+			.TDFriendSelector_selectedCountContainer { font-weight: bold; float: left; padding: 3px 0; }
+			#TDFriendSelector_searchField { float: right; }
 		}
-		.tdfriendselector_friendsMask { width: $friendWidth; margin: 10px 0 0; position: relative; overflow: hidden; }
-		.tdfriendselector_friendsContainer {
+		.TDFriendSelector_friendsMask { width: $friendWidth; margin: 10px 0 0; position: relative; overflow: hidden; }
+		.TDFriendSelector_friendsContainer {
 			width: $friendWidth; position: absolute; top: 0; left: 0;
-			.tdfriendselector_friend {
+			.TDFriendSelector_friend {
 				display: block; padding: 5px 10px; margin-bottom: 2px; border-bottom: 1px solid #cacaca; cursor: pointer;
-				.tdfriendselector_friendAvatar { float: left; height: 50px; width: 50px; }
-				.tdfriendselector_friendName { float: left; font-size: 14px; font-weight: bold; padding: 17px 0 17px 20px; position: relative; width: 280px; }
-				.tdfriendselector_friendSelect { display: none; position: absolute; right: 0; top: 19px; text-align: right; color: #666; font-size: 10px; font-weight: normal; }
-				&:hover .tdfriendselector_friendSelect { display: block; }
+				.TDFriendSelector_friendAvatar { float: left; height: 50px; width: 50px; }
+				.TDFriendSelector_friendName { float: left; font-size: 14px; font-weight: bold; padding: 17px 0 17px 20px; position: relative; width: 280px; }
+				.TDFriendSelector_friendSelect { display: none; position: absolute; right: 0; top: 19px; text-align: right; color: #666; font-size: 10px; font-weight: normal; }
+				&:hover .TDFriendSelector_friendSelect { display: block; }
 
 				/* Selected friends */
-				&.tdfriendselector_friendSelected { background: #f0f0f0; }
+				&.TDFriendSelector_friendSelected { background: #f0f0f0; }
 
 				/* Disabled friends are greyed out */
-				&.tdfriendselector_friendDisabled {
+				&.TDFriendSelector_friendDisabled {
 					cursor: default; opacity: .5; filter: alpha(opacity=50); -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-					&:hover .tdfriendselector_friendSelect { display: none; }
+					&:hover .TDFriendSelector_friendSelect { display: none; }
 				}
 
 				/* Filtered friends are not shown */
-				&.tdfriendselector_friendFiltered { display: none }
+				&.TDFriendSelector_friendFiltered { display: none }
 			}
 		}
-		.tdfriendselector_footer {
+		.TDFriendSelector_footer {
 			padding: 8px 10px; background: #F2F2F2; border-top: 1px solid #CCC;
-			#tdfriendselector_pagePrev, #tdfriendselector_pageNext { float: left; height: 21px; width: 22px; overflow: hidden; text-indent: -999em; background: transparent url(tdfriendselector.png) no-repeat 0 0; }
-			#tdfriendselector_pagePrev { background-position: -44px 0; margin-right: 2px; }
-			#tdfriendselector_pageNext { margin-right: 6px; }
-			#tdfriendselector_pagePrev.tdfriendselector_disabled { background-position: -66px 0; }
-			#tdfriendselector_pageNext.tdfriendselector_disabled { background-position: -22px 0; }
-			.tdfriendselector_pageNumberContainer { float: left; padding: 4px 0 0; }
-			#tdfriendselector_buttonOK { float: right; background: #3B5998; color: #FFF; padding: 4px 20px 5px 20px; border: 1px solid; border-color: #D9DFEA #0E1F5B #0E1F5B #D9DFEA; }
+			#TDFriendSelector_pagePrev, #TDFriendSelector_pageNext { float: left; height: 21px; width: 22px; overflow: hidden; text-indent: -999em; background: transparent url(tdfriendselector.png) no-repeat 0 0; }
+			#TDFriendSelector_pagePrev { background-position: -44px 0; margin-right: 2px; }
+			#TDFriendSelector_pageNext { margin-right: 6px; }
+			#TDFriendSelector_pagePrev.TDFriendSelector_disabled { background-position: -66px 0; }
+			#TDFriendSelector_pageNext.TDFriendSelector_disabled { background-position: -22px 0; }
+			.TDFriendSelector_pageNumberContainer { float: left; padding: 4px 0 0; }
+			#TDFriendSelector_buttonOK { float: right; background: #3B5998; color: #FFF; padding: 4px 20px 5px 20px; border: 1px solid; border-color: #D9DFEA #0E1F5B #0E1F5B #D9DFEA; }
 		}
 	}
 }
