@@ -46,9 +46,10 @@ var FBFSelector = (function(module, $) {
 			containerSelector : '#tdfriendselector',
 			buttonSelector    : '.social_box_chooseFriends',
 			speed             : 500,
-			amount            : 4,
+			maxSelection      : 4,
 			debug             : false,
-			page              : 10,
+			friendsPerPage    : 10,
+			friendHeight      : 62,
 			disabledClass     : 'tdfriendselector_disabled'
 		};
 
@@ -207,7 +208,7 @@ var FBFSelector = (function(module, $) {
 		if (!$container.hasClass('tdfriendselector_friendSelected')) {
 			store = true;
 
-			if (len < settings.amount) {
+			if (len < settings.maxSelection) {
 				for (i = 0; i < len; i += 1) {
 					if (rels[rel][i] === id) { store = false; }
 				}
@@ -218,7 +219,7 @@ var FBFSelector = (function(module, $) {
 					$countContainer.html(rels[rel].length);
 					log('FBFSelector - selectFriend - selected IDs: ', rels[rel]);
 					$container.trigger('FBFSfriendSelected', [rel, id, name]);
-					if (len + 1 === settings.amount) { $container.trigger('FBFSAmountReached', [rel]); }
+					if (len + 1 === settings.maxSelection) { $container.trigger('FBFSAmountReached', [rel]); }
 				} else {
 					log('FBFSelector - selectFriend - ID already stored');
 				}
@@ -237,7 +238,7 @@ var FBFSelector = (function(module, $) {
 			}
 		}
 
-		if (len === settings.amount) { $container.trigger('FBFSAmountReached', [rel]); }
+		if (len === settings.maxSelection) { $container.trigger('FBFSAmountReached', [rel]); }
 	};
 
 	getFriends = function(callback) {
@@ -298,7 +299,7 @@ var FBFSelector = (function(module, $) {
 		var friendsLength, i, wrapper, pageLength, j, friendID;
 
 		friendsLength = friends.length;
-		pageLength = Math.ceil(friendsLength / settings.page);
+		pageLength = Math.ceil(friendsLength / settings.friendsPerPage);
 		wrapper = document.createDocumentFragment();
 		wrapper.innerHTML = '';
 
@@ -306,8 +307,8 @@ var FBFSelector = (function(module, $) {
 
 		for (j = 0; j < pageLength; j += 1) {
 			wrapper.innerHTML += '<li class="tdfriendselector_friendPage" rel="' + j + '"' + (j > 0 ? ' style="display: none;"' : '') + '>';
-			for (i = 0; i < settings.page; i += 1) {
-				friendID = (j * settings.page) + i;
+			for (i = 0; i < settings.friendsPerPage; i += 1) {
+				friendID = (j * settings.friendsPerPage) + i;
 				if (friendID < friendsLength) {
 					//log('FBFSelector - showSelector - friendID: ', friendID);
 					//log('FBFSelector - showSelector - Page: ', j);
@@ -320,7 +321,7 @@ var FBFSelector = (function(module, $) {
 
 		$friendsContainer.html(wrapper.innerHTML);
 		$countContainer.html(rels[rel].length);
-		$countTotalContainer.html(settings.amount);
+		$countTotalContainer.html(settings.maxSelection);
 		$pageCountContainer.html("1");
 		$pageCountTotalContainer.html(pageLength);
 
