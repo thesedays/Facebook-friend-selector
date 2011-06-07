@@ -26,7 +26,7 @@ body { overflow-y: scroll; }
 		position: relative; width: 400px; background: rgba(82, 82, 82, 0.7); @include borderRadius(8px); padding: 10px; margin: 0 auto;
 		.fb_friends_close {
 			font-size: 16px; position: absolute; right: 18px; top: 15px;
-			a, a:active, a:hover, a:visited { color: #FFF; }
+			&, &:active, &:hover, &:visited { color: #FFF; }
 		}
 		form {
 			border: 1px solid #3B5998;
@@ -52,21 +52,13 @@ body { overflow-y: scroll; }
 			}
 			.fb_friends_footer {
 				padding: 8px 10px; background: #F2F2F2; border-top: 1px solid #CCC;
-				.fb_friends_paging_buttons {
-					float: left;
-					a { background: #e2e4e4; border: 1px solid #979797; float: left; padding: 10px; position: relative; }
-					a.fb_friends_prevNext { background: url(images/fb_dialog_next.png) no-repeat center center scroll; }
-					a.fb_friends_prevPage { background: url(images/fb_dialog_previous.png) no-repeat center center scroll; }
-					a span { position: absolute; left: -9000px; }
-					a.disabled { background: #f1f1f1; border: 1px solid #c6c6c6; }
-					a.fb_friends_prevNext.disabled { background: url(images/fb_dialog_next_disabled.png) no-repeat center center scroll; }
-					a.fb_friends_prevPage.disabled { background: url(images/fb_dialog_previous_disabled.png) no-repeat center center scroll; }
-				}
+				.fb_friends_prevNext, .fb_friends_prevPage { background: #e2e4e4; border: 1px solid #979797; float: left; height: 20px; width: 20px; position: relative; overflow: hidden; text-indent: -999em; }
+				.fb_friends_prevNext { background: url(images/fb_dialog_next.png) no-repeat center center scroll; }
+				.fb_friends_prevPage { background: url(images/fb_dialog_previous.png) no-repeat center center scroll; }
+				.fb_friends_prevNext.disabled { background: #f1f1f1; border: 1px solid #c6c6c6; background: url(images/fb_dialog_next_disabled.png) no-repeat center center scroll; }
+				.fb_friends_prevPage.disabled { background: #f1f1f1; border: 1px solid #c6c6c6; background: url(images/fb_dialog_previous_disabled.png) no-repeat center center scroll; }
 				.fb_friends_paging { float: left; padding: 4px 0 0 6px; }
-				.fb_friends_ok {
-					float: right;
-					a { background: #3B5998; color: #FFF; padding: 4px 20px 5px 20px; border: 1px solid; border-color: #D9DFEA #0E1F5B #0E1F5B #D9DFEA; text-transform: uppercase; display: block; }
-				}
+				.fb_friends_ok { float: right; background: #3B5998; color: #FFF; padding: 4px 20px 5px 20px; border: 1px solid; border-color: #D9DFEA #0E1F5B #0E1F5B #D9DFEA; }
 			}
 		}
 	}
