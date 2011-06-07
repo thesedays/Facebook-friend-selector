@@ -6,12 +6,48 @@ window.fbAsyncInit = function () {
 	FB.init({appId: '172102396182433', status: true, cookie: false, xfbml: false});
 
 	$(document).ready(function () {
-		var selector1, selector2;
+		var selector1, selector2, callbackFriendSelected, callbackFriendUnselected, callbackMaxSelection, callbackSubmit;
 
 		TDFriendSelector.init({debug: true});
 
 		selector1 = TDFriendSelector.newInstance();
 		selector2 = TDFriendSelector.newInstance({maxSelection: 2, friendsPerPage: 5});
+
+		callbackFriendSelected = function(friendId) {
+			var result, friend, name, currentDate = new Date();
+			friend = TDFriendSelector.getFriendById(friendId);
+			name = friend.name;
+			result = $('<div>' + currentDate + ' - Selected ' + name + ' (ID: ' + friendId + ')</div>');
+			$("#results").append(result);
+		};
+		selector1.setCallbackFriendSelected(callbackFriendSelected);
+		selector2.setCallbackFriendSelected(callbackFriendSelected);
+
+		callbackFriendUnselected = function(friendId) {
+			var result, friend, name, currentDate = new Date();
+			friend = TDFriendSelector.getFriendById(friendId);
+			name = friend.name;
+			result = $('<div>' + currentDate + ' - Unselected ' + name + ' (ID: ' + friendId + ')</div>');
+			$("#results").append(result);
+		};
+		selector1.setCallbackFriendUnselected(callbackFriendUnselected);
+		selector2.setCallbackFriendUnselected(callbackFriendUnselected);
+
+		callbackMaxSelection = function() {
+			var result, currentDate = new Date();
+			result = $('<div>' + currentDate + ' - Selected the maximum number of friends</div>');
+			$("#results").append(result);
+		};
+		selector1.setCallbackMaxSelection(callbackMaxSelection);
+		selector2.setCallbackMaxSelection(callbackMaxSelection);
+
+		callbackSubmit = function(selectedFriendIds) {
+			var result, currentDate = new Date();
+			result = $('<div>' + currentDate + ' - Clicked OK with the following friends selected: ' + selectedFriendIds.join(", ") + '</div>');
+			$("#results").append(result);
+		};
+		selector1.setCallbackSubmit(callbackSubmit);
+		selector2.setCallbackSubmit(callbackSubmit);
 
 		$("#btnLogin").click(function (e) {
 			e.preventDefault();
@@ -37,34 +73,6 @@ window.fbAsyncInit = function () {
 		$("#btnSelect2").click(function (e) {
 			e.preventDefault();
 			selector2.showFriendSelector();
-		});
-
-		$("#TDFriendSelector").bind("TDFriendSelector_friendSelected", function (e, friendId) {
-			var result, friend, name, currentDate = new Date();
-			friend = TDFriendSelector.getFriendById(friendId);
-			name = friend.name;
-			result = $('<div>' + currentDate + ' - Selected ' + name + ' (ID: ' + friendId + ')</div>');
-			$("#results").append(result);
-		});
-
-		$("#TDFriendSelector").bind("TDFriendSelector_friendUnselected", function (e, friendId) {
-			var result, friend, name, currentDate = new Date();
-			friend = TDFriendSelector.getFriendById(friendId);
-			name = friend.name;
-			result = $('<div>' + currentDate + ' - Unselected ' + name + ' (ID: ' + friendId + ')</div>');
-			$("#results").append(result);
-		});
-
-		$("#TDFriendSelector").bind("TDFriendSelector_amountReached", function (e, friendId) {
-			var result, currentDate = new Date();
-			result = $('<div>' + currentDate + ' - Selected the maximum number of friends</div>');
-			$("#results").append(result);
-		});
-
-		$("#TDFriendSelector").bind("TDFriendSelector_submit", function (e, friendIds) {
-			var selectedFriendIds, currentDate = new Date();
-			result = $('<div>' + currentDate + ' - Clicked OK with the following friends selected: ' + friendIds.join(", ") + '</div>');
-			$("#results").append(result);
 		});
 
 	});

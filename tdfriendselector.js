@@ -103,9 +103,11 @@ var TDFriendSelector = (function(module, $) {
 	newInstance = function(options) {
 		// Public functions
 		var showFriendSelector, hideFriendSelector, getselectedFriendIds, setDisabledFriendIds, filterFriends,
+		setCallbackFriendSelected, setCallbackFriendUnselected, setCallbackMaxSelection, setCallbackSubmit,
 
 		// Private variables
 		instanceSettings, selectedFriendIds = [], disabledFriendIds = [], numFilteredFriends = 0,
+		callbackFriendSelected, callbackFriendUnselected, callbackMaxSelection, callbackSubmit,
 
 		// Private functions
 		bindEvents, unbindEvents, updatePaginationButtons, selectFriend;
@@ -198,6 +200,11 @@ var TDFriendSelector = (function(module, $) {
 			updatePaginationButtons(1);
 		};
 
+		setCallbackFriendSelected = function(callback) { callbackFriendSelected = callback; };
+		setCallbackFriendUnselected = function(callback) { callbackFriendUnselected = callback; };
+		setCallbackMaxSelection = function(callback) { callbackMaxSelection = callback; };
+		setCallbackSubmit = function(callback) { callbackSubmit = callback; };
+
 		/////////////////////////////////////////
 		// PRIVATE FUNCTIONS FOR AN INSTANCE
 		/////////////////////////////////////////
@@ -212,7 +219,7 @@ var TDFriendSelector = (function(module, $) {
 			$buttonOK.bind('click', function(e) {
 				e.preventDefault();
 				hideFriendSelector();
-				$container.trigger('TDFriendSelector_submit', [selectedFriendIds]);
+				if (typeof callbackSubmit === "function") { callbackSubmit(selectedFriendIds); }
 			});
 
 			$friends.bind('click', function(e) {
@@ -279,7 +286,7 @@ var TDFriendSelector = (function(module, $) {
 						$friend.addClass(settings.friendSelectedClass);
 						$selectedCount.html(selectedFriendIds.length);
 						log('TDFriendSelector - newInstance - selectFriend - selected IDs: ', selectedFriendIds);
-						$friend.trigger('TDFriendSelector_friendSelected', [friendId]);
+						if (typeof callbackFriendSelected === "function") { callbackFriendSelected(friendId); }
 					} else {
 						log('TDFriendSelector - newInstance - selectFriend - ID already stored');
 					}
@@ -292,21 +299,27 @@ var TDFriendSelector = (function(module, $) {
 						selectedFriendIds.splice(i, 1);
 						$friend.removeClass(settings.friendSelectedClass);
 						$selectedCount.html(selectedFriendIds.length);
-						$friend.trigger('TDFriendSelector_friendUnselected', [friendId]);
+						if (typeof callbackFriendUnselected === "function") { callbackFriendUnselected(friendId); }
 						return false;
 					}
 				}
 			}
 
-			if (selectedFriendIds.length === instanceSettings.maxSelection) { $friend.trigger('TDFriendSelector_amountReached'); }
+			if (selectedFriendIds.length === instanceSettings.maxSelection) {
+				if (typeof callbackMaxSelection === "function") { callbackMaxSelection(); }
+			}
 		};
 
 		// Return an object with access to the public members
 		return {
-			showFriendSelector: showFriendSelector,
-			hideFriendSelector: hideFriendSelector,
-			getselectedFriendIds: getselectedFriendIds,
-			filterFriends: filterFriends
+			showFriendSelector          : showFriendSelector,
+			hideFriendSelector          : hideFriendSelector,
+			getselectedFriendIds        : getselectedFriendIds,
+			filterFriends               : filterFriends,
+			setCallbackFriendSelected   : setCallbackFriendSelected,
+			setCallbackFriendUnselected : setCallbackFriendUnselected,
+			setCallbackMaxSelection     : setCallbackMaxSelection,
+			setCallbackSubmit           : setCallbackSubmit
 		};
 	};
 
@@ -384,11 +397,11 @@ var TDFriendSelector = (function(module, $) {
 	};
 
 	module = {
-		init: init,
-		setFriends: setFriends,
-		getFriends: getFriends,
-		getFriendById: getFriendById,
-		newInstance: newInstance
+		init          : init,
+		setFriends    : setFriends,
+		getFriends    : getFriends,
+		getFriendById : getFriendById,
+		newInstance   : newInstance
 	};
 	return module;
 
