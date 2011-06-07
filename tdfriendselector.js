@@ -227,15 +227,15 @@ var TDFriendSelector = (function(module, $) {
 				var pageNumber = parseInt($pageNumber.text(), 10) - 1;
 				e.preventDefault();
 				if (pageNumber < 1) { return; }
-				$friendsContainer.css({top: 0 - (pageNumber * instanceSettings.friendsPerPage * instanceSettings.friendHeight)});
+				$friendsContainer.css({top: 0 - ((pageNumber - 1) * instanceSettings.friendsPerPage * instanceSettings.friendHeight)});
 				updatePaginationButtons(pageNumber);
 			});
 
 			$pageNext.bind('click', function(e) {
 				var pageNumber = parseInt($pageNumber.text(), 10) + 1, numPages = Math.ceil(friends.length / instanceSettings.friendsPerPage);
 				e.preventDefault();
-				if (pageNumber > numPages) { return; }
-				$friendsContainer.css({top: 0 - (pageNumber * instanceSettings.friendsPerPage * instanceSettings.friendHeight)});
+				if ($(this).hasClass(settings.disabledClass)) { return; }
+				$friendsContainer.css({top: 0 - ((pageNumber - 1) * instanceSettings.friendsPerPage * instanceSettings.friendHeight)});
 				updatePaginationButtons(pageNumber);
 			});
 		};

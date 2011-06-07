@@ -37,6 +37,7 @@
 			.TDFriendSelector_selectedCountContainer { font-weight: bold; float: left; padding: 3px 0; }
 			#TDFriendSelector_searchField { float: right; }
 		}
+
 		.TDFriendSelector_friendsMask { width: $friendWidth; margin: 10px 0 0; position: relative; overflow: hidden; }
 		.TDFriendSelector_friendsContainer {
 			width: $friendWidth; position: absolute; top: 0; left: 0;
@@ -60,13 +61,14 @@
 				&.TDFriendSelector_friendFiltered { display: none }
 			}
 		}
+
 		.TDFriendSelector_footer {
 			padding: 8px 10px; background: #F2F2F2; border-top: 1px solid #CCC;
 			#TDFriendSelector_pagePrev, #TDFriendSelector_pageNext { float: left; height: 21px; width: 22px; overflow: hidden; text-indent: -999em; background: transparent url(tdfriendselector.png) no-repeat 0 0; }
 			#TDFriendSelector_pagePrev { background-position: -44px 0; margin-right: 2px; }
 			#TDFriendSelector_pageNext { margin-right: 6px; }
-			#TDFriendSelector_pagePrev.TDFriendSelector_disabled { background-position: -66px 0; }
-			#TDFriendSelector_pageNext.TDFriendSelector_disabled { background-position: -22px 0; }
+			#TDFriendSelector_pagePrev.TDFriendSelector_disabled { background-position: -66px 0; cursor: default; }
+			#TDFriendSelector_pageNext.TDFriendSelector_disabled { background-position: -22px 0; cursor: default; }
 			.TDFriendSelector_pageNumberContainer { float: left; padding: 4px 0 0; }
 			#TDFriendSelector_buttonOK { float: right; background: #3B5998; color: #FFF; padding: 4px 20px 5px 20px; border: 1px solid; border-color: #D9DFEA #0E1F5B #0E1F5B #D9DFEA; }
 		}
