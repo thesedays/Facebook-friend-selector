@@ -194,10 +194,9 @@ var FBFSelector = (function(module, $) {
 	};
 
 	selectFriend = function(a) {
-		var link, $container, rel, id, i, name, len, store, count;
+		var $container, rel, id, i, name, len, store, count;
 
-		link = a;
-		$container = link.parents('.tdfriendselector_friend');
+		$container = a;
 		rel = $container.attr('data-rel');
 		id = $container.attr('data-id');
 		name = $container.find('.tdfriendselector_friendName span:first').text();
@@ -205,7 +204,7 @@ var FBFSelector = (function(module, $) {
 
 		if (!rels[rel]) { rels[rel] = []; }
 
-		if (!$container.hasClass('tdfriendselector_stored')) {
+		if (!$container.hasClass('tdfriendselector_friendSelected')) {
 			store = true;
 
 			if (len < settings.amount) {
@@ -215,7 +214,7 @@ var FBFSelector = (function(module, $) {
 
 				if (store) {
 					rels[rel].push(id);
-					$container.addClass('tdfriendselector_stored');
+					$container.addClass('tdfriendselector_friendSelected');
 					$countContainer.html(rels[rel].length);
 					log('FBFSelector - selectFriend - selected IDs: ', rels[rel]);
 					$container.trigger('FBFSfriendSelected', [rel, id, name]);
@@ -230,7 +229,7 @@ var FBFSelector = (function(module, $) {
 			for (i = 0; i < len; i += 1) {
 				if(rels[rel][i] === id) {
 					rels[rel].splice(i, 1);
-					$container.removeClass('tdfriendselector_stored');
+					$container.removeClass('tdfriendselector_friendSelected');
 					$countContainer.html(rels[rel].length);
 					$container.trigger('FBFSfriendUnSelected', [rel, id, name]);
 					return false;
@@ -275,23 +274,21 @@ var FBFSelector = (function(module, $) {
 				for (i = 0; i < idsLength; i += 1) {
 					if ('' + friend.id === '' + ids[i]) {
 						stored = true;
-						sclass += ' tdfriendselector_stored';
-						if (rel !== r) { sclass += ' tdfriendselector_prestored'; }
+						sclass += ' tdfriendselector_friendSelected';
+						if (rel !== r) { sclass += ' tdfriendselector_friendDisabled'; }
 						if (r === 'bans') { sclass += ' tdfriendselector_invited'; }
 					}
 				}
 			}
 		}
 
-		f_html = '<li class="tdfriendselector_friend tdfriendselector_clearfix' + sclass + '" data-rel="' + rel + '" data-id="' + friend.id + '">' +
-				'<a href="#" class="tdfriendselector_friendLink">' +
-					'<img src="' + f_avatar + '" width="50" height="50" alt="' + friend.name + '" class="tdfriendselector_friendAvatar" />' +
-					'<div class="tdfriendselector_friendName">' + 
-						'<span>' + friend.name + '</span>' +
-						'<span class="tdfriendselector_friendSelect">select</span>' +
-					'</div>' +
-				'</a>' +
-			'</li>';
+		f_html = '<a href="#" class="tdfriendselector_friend tdfriendselector_clearfix' + sclass + '" data-rel="' + rel + '" data-id="' + friend.id + '">' +
+				'<img src="' + f_avatar + '" width="50" height="50" alt="' + friend.name + '" class="tdfriendselector_friendAvatar" />' +
+				'<div class="tdfriendselector_friendName">' + 
+					'<span>' + friend.name + '</span>' +
+					'<span class="tdfriendselector_friendSelect">select</span>' +
+				'</div>' +
+			'</a>';
 
 		//log('FBFSelector - buildFriend - f_html: ', f_html);
 		return f_html;
@@ -308,7 +305,7 @@ var FBFSelector = (function(module, $) {
 		log('FBFSelector - showSelector - friends: ', friends);
 
 		for (j = 0; j < pageLength; j += 1) {
-			wrapper.innerHTML += '<li class="tdfriendselector_friendPage" rel="' + j + '"' + (j > 0 ? ' style="display: none;"' : '') + '><ul>';
+			wrapper.innerHTML += '<li class="tdfriendselector_friendPage" rel="' + j + '"' + (j > 0 ? ' style="display: none;"' : '') + '>';
 			for (i = 0; i < settings.page; i += 1) {
 				friendID = (j * settings.page) + i;
 				if (friendID < friendsLength) {
@@ -318,7 +315,7 @@ var FBFSelector = (function(module, $) {
 					wrapper.innerHTML += buildFriend(friends[friendID]);
 				}
 			}
-			wrapper.innerHTML += '</ul></li>';
+			wrapper.innerHTML += '</li>';
 		}
 
 		$friendsContainer.html(wrapper.innerHTML);
