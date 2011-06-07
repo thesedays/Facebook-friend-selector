@@ -34,7 +34,7 @@ var FBFSelector = (function(module, $) {
 
 	// Private members
 	getFriends, search, ban, removeFriend, selectFriend,
-	connect, bindEvents, resize, log, showSelector, hideSelector, sortFriends, buildFriend,
+	connect, bindEvents, log, showSelector, hideSelector, sortFriends, buildFriend,
 	settings, friends, rel = '', rels = {},
 	$container, $button, $friendsContainer, $countContainer, $countTotalContainer, $pageContainer, $pageCountContainer, $pageCountTotalContainer, $pagePrev, $pageNext, $searchContainer, $searchField, $searchList;
 
@@ -43,14 +43,13 @@ var FBFSelector = (function(module, $) {
 
 		// Default settings
 		settings = {
-			containerSelector : '#fb_friends',
+			containerSelector : '#tdfriendselector',
 			buttonSelector    : '.social_box_chooseFriends',
 			speed             : 500,
 			amount            : 4,
 			debug             : false,
 			page              : 10,
-			disabledClass     : 'disabled',
-			updateOnResize    : true
+			disabledClass     : 'tdfriendselector_disabled'
 		};
 
 		// Override defaults with arguments
@@ -59,23 +58,20 @@ var FBFSelector = (function(module, $) {
 		// Select DOM elements
 		$container = $(settings.containerSelector);
 		$button = $(settings.buttonSelector);
-		$friendsContainer = $container.find('.fb_friends_list ul');
-		$countContainer = $container.find('.fb_friends_count');
-		$countTotalContainer = $container.find('.fb_friends_total');
+		$friendsContainer = $container.find('.tdfriendselector_list ul');
+		$countContainer = $container.find('.tdfriendselector_count');
+		$countTotalContainer = $container.find('.tdfriendselector_total');
 
-		$pageContainer = $container.find('.fb_friends_paging');
-		$pageCountContainer = $container.find('.fb_friends_paging_count');
-		$pageCountTotalContainer = $container.find('.fb_friends_paging_total');
+		$pageContainer = $container.find('.tdfriendselector_paging');
+		$pageCountContainer = $container.find('.tdfriendselector_pagingCount');
+		$pageCountTotalContainer = $container.find('.tdfriendselector_pagingTotal');
 
-		$pagePrev = $container.find('.fb_friends_prevPage');
-		$pageNext = $container.find('.fb_friends_prevNext');
+		$pagePrev = $container.find('.tdfriendselector_prevPage');
+		$pageNext = $container.find('.tdfriendselector_prevNext');
 
-		$searchContainer = $container.find('.fb_friends_search_form');
-		$searchField = $searchContainer.find('.text');
+		$searchContainer = $container.find('.tdfriendselector_search_form');
+		$searchField = $searchContainer.find('.tdfriendselector_text');
 		$searchList = $container.find('.fb_search_list ul');
-
-		$($container).height($(window).height());
-		$($container).width($(window).width());
 
 		if (FB) {
 			bindEvents();
@@ -88,12 +84,6 @@ var FBFSelector = (function(module, $) {
 
 	// Add event listeners
 	bindEvents = function() {
-
-		if (settings.updateOnResize) {
-			$(window).bind('resize', function() {
-				resize();
-			}).trigger('resize');
-		}
 
 		$button.bind('click', function(e) {
 			e.preventDefault();
@@ -115,7 +105,7 @@ var FBFSelector = (function(module, $) {
 			}
 		});
 
-		$container.find('.fb_friends_close, .fb_friends_ok').bind('click', function(e) {
+		$container.find('.tdfriendselector_close, .tdfriendselector_ok').bind('click', function(e) {
 			e.preventDefault();
 			rel = '';
 			hideSelector();
@@ -132,8 +122,8 @@ var FBFSelector = (function(module, $) {
 			var page = 1;
 			page = parseInt($pageCountContainer.text(), 10);
 
-			if ($friendsContainer.find('.fb_friend_page:visible').prev().length > 0) {
-				$friendsContainer.find('.fb_friend_page:visible').hide().prev().show();
+			if ($friendsContainer.find('.tdfriendselector_friendPage:visible').prev().length > 0) {
+				$friendsContainer.find('.tdfriendselector_friendPage:visible').hide().prev().show();
 				$pageCountContainer.html(page - 1);
 			}
 			if (page === 2) { $(this).addClass(settings.disabledClass); }
@@ -144,12 +134,12 @@ var FBFSelector = (function(module, $) {
 			e.preventDefault();
 
 			var page = 1;
-			if($friendsContainer.find('.fb_friend_page:visible').next().length > 0) {
-				$friendsContainer.find('.fb_friend_page:visible').hide().next().show();
+			if($friendsContainer.find('.tdfriendselector_friendPage:visible').next().length > 0) {
+				$friendsContainer.find('.tdfriendselector_friendPage:visible').hide().next().show();
 				page = parseInt($pageCountContainer.text(), 10);
 				$pageCountContainer.html(page + 1);
 			}
-			if (page === $friendsContainer.find('.fb_friend_page').length - 1) { $(this).addClass(settings.disabledClass); }
+			if (page === $friendsContainer.find('.tdfriendselector_friendPage').length - 1) { $(this).addClass(settings.disabledClass); }
 			$pagePrev.removeClass(settings.disabledClass);
 		});
 
@@ -177,12 +167,6 @@ var FBFSelector = (function(module, $) {
 			$searchList.hide();
 		}
 	};*/
-
-	resize = function() {
-		var $window = $(window);
-		$container.height($window.height());
-		$container.width($window.width());
-	};
 
 	/**
 	 * Get the selected friends
@@ -213,15 +197,15 @@ var FBFSelector = (function(module, $) {
 		var link, $container, rel, id, i, name, len, store, count;
 
 		link = a;
-		$container = link.parents('.fb_friend');
+		$container = link.parents('.tdfriendselector_friend');
 		rel = $container.attr('data-rel');
 		id = $container.attr('data-id');
-		name = $container.find('.fb_friend_name span:first').text();
+		name = $container.find('.tdfriendselector_friendName span:first').text();
 		len = rels[rel].length;
 
 		if (!rels[rel]) { rels[rel] = []; }
 
-		if (!$container.hasClass('stored')) {
+		if (!$container.hasClass('tdfriendselector_stored')) {
 			store = true;
 
 			if (len < settings.amount) {
@@ -231,7 +215,7 @@ var FBFSelector = (function(module, $) {
 
 				if (store) {
 					rels[rel].push(id);
-					$container.addClass('stored');
+					$container.addClass('tdfriendselector_stored');
 					$countContainer.html(rels[rel].length);
 					log('FBFSelector - selectFriend - selected IDs: ', rels[rel]);
 					$container.trigger('FBFSfriendSelected', [rel, id, name]);
@@ -246,7 +230,7 @@ var FBFSelector = (function(module, $) {
 			for (i = 0; i < len; i += 1) {
 				if(rels[rel][i] === id) {
 					rels[rel].splice(i, 1);
-					$container.removeClass('stored');
+					$container.removeClass('tdfriendselector_stored');
 					$countContainer.html(rels[rel].length);
 					$container.trigger('FBFSfriendUnSelected', [rel, id, name]);
 					return false;
@@ -291,20 +275,20 @@ var FBFSelector = (function(module, $) {
 				for (i = 0; i < idsLength; i += 1) {
 					if ('' + friend.id === '' + ids[i]) {
 						stored = true;
-						sclass += ' stored';
-						if (rel !== r) { sclass += ' prestored'; }
-						if (r === 'bans') { sclass += ' invited'; }
+						sclass += ' tdfriendselector_stored';
+						if (rel !== r) { sclass += ' tdfriendselector_prestored'; }
+						if (r === 'bans') { sclass += ' tdfriendselector_invited'; }
 					}
 				}
 			}
 		}
 
-		f_html = '<li class="fb_friend clearfix' + sclass + '" data-rel="' + rel + '" data-id="' + friend.id + '">' +
-				'<a href="#" class="fb_friend_link">' +
-					'<img src="' + f_avatar + '" width="50" height="50" alt="' + friend.name + '" class="fb_friend_avatar" />' +
-					'<div class="fb_friend_name">' + 
+		f_html = '<li class="tdfriendselector_friend tdfriendselector_clearfix' + sclass + '" data-rel="' + rel + '" data-id="' + friend.id + '">' +
+				'<a href="#" class="tdfriendselector_friendLink">' +
+					'<img src="' + f_avatar + '" width="50" height="50" alt="' + friend.name + '" class="tdfriendselector_friendAvatar" />' +
+					'<div class="tdfriendselector_friendName">' + 
 						'<span>' + friend.name + '</span>' +
-						'<span class="fb_friend_select">select</span>' +
+						'<span class="tdfriendselector_friendSelect">select</span>' +
 					'</div>' +
 				'</a>' +
 			'</li>';
@@ -324,7 +308,7 @@ var FBFSelector = (function(module, $) {
 		log('FBFSelector - showSelector - friends: ', friends);
 
 		for (j = 0; j < pageLength; j += 1) {
-			wrapper.innerHTML += '<li class="fb_friend_page" rel="' + j + '"' + (j > 0 ? ' style="display: none;"' : '') + '><ul>';
+			wrapper.innerHTML += '<li class="tdfriendselector_friendPage" rel="' + j + '"' + (j > 0 ? ' style="display: none;"' : '') + '><ul>';
 			for (i = 0; i < settings.page; i += 1) {
 				friendID = (j * settings.page) + i;
 				if (friendID < friendsLength) {

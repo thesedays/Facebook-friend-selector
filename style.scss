@@ -4,59 +4,60 @@
 	border-radius: $radius;
 }
 
-.clearfix:before, .clearfix:after { content: ""; display: table; }
-.clearfix:after { clear: both; }
-.clearfix { zoom: 1; }
 
-body { overflow-y: scroll; }
-
-/*
-	FB friends chooser
-	@author Bram Verdyck
-*/
-#fb_friends {
+/*!
+ * TD Friend Selector
+ * @author Bram Verdyck, Keegan Street
+ */
+#tdfriendselector {
+	/* Common styles */
 	display: none; width: 100%; padding: 10px 0 0; position: absolute; left: 0; top: 0; z-index: 1000; color: #333; font-family: "lucida grande", tahoma, verdana, arial, sans-serif; font-size: 11px;
 	a, a:active, a:hover, a:visited { text-decoration: none; color: #3B5998; }
 	p, ul, li { margin: 0; padding: 0; }
-	.fb_friends_dialog {
-		position: relative; width: 400px; background: rgba(82, 82, 82, 0.7); @include borderRadius(8px); padding: 10px; margin: 0 auto;
-		.fb_friends_close {
-			font-size: 16px; position: absolute; right: 18px; top: 15px;
+	li { list-style-type: none; }
+
+	/* Clearfix */
+	.tdfriendselector_clearfix:before, .tdfriendselector_clearfix:after { content: ""; display: table; }
+	.tdfriendselector_clearfix:after { clear: both; }
+	.tdfriendselector_clearfix { zoom: 1; }
+
+	/* The interface */
+	.tdfriendselector_dialog {
+		width: 400px; padding: 10px; margin: 0 auto; position: relative; background: rgba(82, 82, 82, 0.7); @include borderRadius(8px);
+		.tdfriendselector_close {
+			position: absolute; right: 18px; top: 15px; font-size: 16px;
 			&, &:active, &:hover, &:visited { color: #FFF; }
 		}
-		form {
-			border: 1px solid #3B5998;
-			.fb_friends_header { padding: 7px 10px; background: #6D84B4; color: #FFF; font-size: 14px; font-weight: bold; }
-			.fb_friends_content { background: #FFF; padding: 10px; }
-			.fb_friends_search { background: #f1f1f1; border: 1px solid #cacaca; border-width: 1px 0; margin-top: 10px; padding: 10px; text-align: right; }
-			.fb_friends_count_container { font-weight: bold; float: left; }
-			.submit_button { display: none; }
-			.fb_friends_list {
-				padding-top: 10px;
-				li.fb_friend_page { padding: 0; margin: 0; list-style-type: none; }
-				li.fb_friend {
-					padding: 5px 10px; border-bottom: 1px solid #cacaca; margin-bottom: 2px; list-style-type: none;
-					&.stored { background: #f0f0f0; }
-					&.prestored { }
-					&.prestored a { cursor: default; }
-					&.prestored a:hover .fb_friend_name .fb_friend_select { display: none; }
-					.fb_friend_link { cursor: pointer; }
-					.fb_friend_avatar { float: left; height: 50px; width: 50px; }
-					.fb_friend_name { float: left; font-size: 14px; font-weight: bold; padding: 17px 0 17px 20px; position: relative; width: 280px; }
-					.fb_friend_name .fb_friend_select { text-align: right; color: #666; display: none; font-size: 10px; font-weight: normal; position: absolute; right: 0; top: 19px; }
-					a:hover .fb_friend_name .fb_friend_select { display: block; }
-				}
+		.tdfriendselector_form { border: 1px solid #3B5998; }
+		.tdfriendselector_header { padding: 7px 10px; background: #6D84B4; color: #FFF; font-size: 14px; font-weight: bold; }
+		.tdfriendselector_content { background: #FFF; padding: 10px; }
+		.tdfriendselector_search { background: #f1f1f1; border: 1px solid #cacaca; border-width: 1px 0; margin-top: 10px; padding: 10px; text-align: right; }
+		.tdfriendselector_countContainer { font-weight: bold; float: left; }
+		.tdfriendselector_submitButton { display: none; }
+		.tdfriendselector_list {
+			padding-top: 10px;
+			.tdfriendselector_friend {
+				padding: 5px 10px; border-bottom: 1px solid #cacaca; margin-bottom: 2px;
+				&.tdfriendselector_stored { background: #f0f0f0; }
+				&.tdfriendselector_prestored { }
+				&.tdfriendselector_prestored a { cursor: default; }
+				&.tdfriendselector_prestored a:hover .fb_friend_name .fb_friend_select { display: none; }
+				.tdfriendselector_friendLink { cursor: pointer; }
+				.tdfriendselector_friendAvatar { float: left; height: 50px; width: 50px; }
+				.tdfriendselector_friendName { float: left; font-size: 14px; font-weight: bold; padding: 17px 0 17px 20px; position: relative; width: 280px; }
+				.tdfriendselector_friendName .tdfriendselector_friendSelect { text-align: right; color: #666; display: none; font-size: 10px; font-weight: normal; position: absolute; right: 0; top: 19px; }
+				a:hover .tdfriendselector_friendName .tdfriendselector_friendSelect { display: block; }
 			}
-			.fb_friends_footer {
-				padding: 8px 10px; background: #F2F2F2; border-top: 1px solid #CCC;
-				.fb_friends_prevNext, .fb_friends_prevPage { background: #e2e4e4; border: 1px solid #979797; float: left; height: 20px; width: 20px; position: relative; overflow: hidden; text-indent: -999em; }
-				.fb_friends_prevNext { background: url(images/fb_dialog_next.png) no-repeat center center scroll; }
-				.fb_friends_prevPage { background: url(images/fb_dialog_previous.png) no-repeat center center scroll; }
-				.fb_friends_prevNext.disabled { background: #f1f1f1; border: 1px solid #c6c6c6; background: url(images/fb_dialog_next_disabled.png) no-repeat center center scroll; }
-				.fb_friends_prevPage.disabled { background: #f1f1f1; border: 1px solid #c6c6c6; background: url(images/fb_dialog_previous_disabled.png) no-repeat center center scroll; }
-				.fb_friends_paging { float: left; padding: 4px 0 0 6px; }
-				.fb_friends_ok { float: right; background: #3B5998; color: #FFF; padding: 4px 20px 5px 20px; border: 1px solid; border-color: #D9DFEA #0E1F5B #0E1F5B #D9DFEA; }
-			}
+		}
+		.tdfriendselector_footer {
+			padding: 8px 10px; background: #F2F2F2; border-top: 1px solid #CCC;
+			.tdfriendselector_prevNext, .tdfriendselector_prevPage { background: #e2e4e4; border: 1px solid #979797; float: left; height: 20px; width: 20px; position: relative; overflow: hidden; text-indent: -999em; }
+			.tdfriendselector_prevNext { background: url(images/fb_dialog_next.png) no-repeat center center scroll; }
+			.tdfriendselector_prevPage { background: url(images/fb_dialog_previous.png) no-repeat center center scroll; }
+			.tdfriendselector_prevNext.tdfriendselector_disabled { background: #f1f1f1; border: 1px solid #c6c6c6; background: url(images/fb_dialog_next_disabled.png) no-repeat center center scroll; }
+			.tdfriendselector_prevPage.tdfriendselector_disabled { background: #f1f1f1; border: 1px solid #c6c6c6; background: url(images/fb_dialog_previous_disabled.png) no-repeat center center scroll; }
+			.tdfriendselector_paging { float: left; padding: 4px 0 0 6px; }
+			.tdfriendselector_ok { float: right; background: #3B5998; color: #FFF; padding: 4px 20px 5px 20px; border: 1px solid; border-color: #D9DFEA #0E1F5B #0E1F5B #D9DFEA; }
 		}
 	}
 }
