@@ -5,7 +5,7 @@
 		<title>These Days Friend Selector</title>
 		<style>
 			body { font-family: sans-serif; color: #333; }
-			h2 { clear: left; }
+			p { clear: left; }
 			.thesedays { float: left; text-decoration: none; margin: 0 10px 10px 0; }
 			.thesedays img { padding: 0; border: 0; height: 68px; width: 68px; }
 			#results { padding: 10px; border: 1px solid #333; font-family: monospace; }
@@ -17,6 +17,8 @@
 
 		<a href="http://labs.thesedays.com" class="thesedays"><img src="http://labs.thesedays.com/wp-content/themes/tdlabs/img/these_days.gif" alt="These Days" /></a>
 		<h1>These Days Friend Selector</h1>
+		<p>This is an interface component for websites and Facebook applications which allows your users to make a selection of one or more of their friends. The friends are returned as an array of Facebook IDs. It is similar to the <code>fb:multi-friend-selector</code> component by Facebook, except it can be used to select friends for anything, not just application requests.</p>
+		<p>Please respect your users and adhere to the <a href="http://developers.facebook.com/policy/" target="_blank">Facebook Platform Policies</a> when using this plugin.</p>
 
 		<h2>Example</h2>
 		<ul>
@@ -25,7 +27,9 @@
 			<li><a href="#" id="btnSelect1">Select friends</a> (This won't work until you log in)</li>
 			<li><a href="#" id="btnSelect2">Select friends in a seperate instance with different options</a> (This won't work until you log in)</li>
 		</ul>
-		<div id="results"></div>
+		<div id="results">
+			<p>ACTIVITY LOG</p>
+		</div>
 
 		<h2>How to implement</h2>
 		<p><a href="https://github.com/thesedays/Facebook-friend-selector">These Days Friend Selector on GitHub</a></p>
