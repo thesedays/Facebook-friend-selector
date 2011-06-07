@@ -1,4 +1,4 @@
-/*globals $, jQuery, FB, FBFSelector */
+/*globals $, jQuery, FB, TDFriendSelector */
 /*jslint white: false, devel: true, onevar: true, browser: true, undef: true, nomen: false, regexp: false, plusplus: true, bitwise: true, newcap: true */
 
 window.fbAsyncInit = function () {
@@ -6,11 +6,14 @@ window.fbAsyncInit = function () {
 	FB.init({appId: '172102396182433', status: true, cookie: false, xfbml: false});
 
 	$(document).ready(function () {
-		var fbfs;
+		var selector1, selector2;
 
-		fbfs = FBFSelector.init({debug: true});
+		TDFriendSelector.init({debug: true});
 
-		$("#login_button").click(function (e) {
+		selector1 = TDFriendSelector.newInstance({maxSelection: 4, friendsPerPage: 10});
+		selector2 = TDFriendSelector.newInstance({maxSelection: 2, friendsPerPage: 5});
+
+		$("#btnLogin").click(function (e) {
 			e.preventDefault();
 			FB.login(function (response) {
 				if (response.session) {
@@ -19,6 +22,14 @@ window.fbAsyncInit = function () {
 					console.log("Not logged in");
 				}
 			}, {});
+		});
+
+		$("#btnSelect1").click(function (e) {
+			selector1.showFriendSelector();
+		});
+
+		$("#btnSelect2").click(function (e) {
+			selector2.showFriendSelector();
 		});
 
 	});

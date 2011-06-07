@@ -10,6 +10,7 @@
  * @author Bram Verdyck, Keegan Street
  */
 #tdfriendselector {
+	$friendWidth: 370px;
 	/* Common styles */
 	display: none; width: 100%; padding: 10px 0 0; position: absolute; left: 0; top: 0; z-index: 1000; color: #333; font-family: "lucida grande", tahoma, verdana, arial, sans-serif; font-size: 11px;
 	a, a:active, a:hover, a:visited { text-decoration: none; color: #3B5998; }
@@ -23,7 +24,7 @@
 
 	/* The interface */
 	.tdfriendselector_dialog {
-		width: 400px; padding: 10px; margin: 0 auto; position: relative; background: rgba(82, 82, 82, 0.7); @include borderRadius(8px);
+		width: $friendWidth + 22; padding: 10px; margin: 0 auto; position: relative; background: rgba(82, 82, 82, 0.7); @include borderRadius(8px);
 		.tdfriendselector_close {
 			position: absolute; right: 18px; top: 15px; font-size: 16px;
 			&, &:active, &:hover, &:visited { color: #FFF; }
@@ -35,8 +36,9 @@
 		.tdfriendselector_searchForm { float: right; }
 		.tdfriendselector_countContainer { font-weight: bold; float: left; }
 		.tdfriendselector_submitButton { display: none; }
+		.tdfriendselector_friendsMask { width: $friendWidth; margin: 10px 0 0; position: relative; overflow: hidden; }
 		.tdfriendselector_list {
-			padding-top: 10px;
+			width: $friendWidth; position: absolute; top: 0; left: 0;
 			.tdfriendselector_friend {
 				display: block; padding: 5px 10px; margin-bottom: 2px; border-bottom: 1px solid #cacaca; cursor: pointer;
 				.tdfriendselector_friendAvatar { float: left; height: 50px; width: 50px; }
