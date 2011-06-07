@@ -25,10 +25,12 @@ window.fbAsyncInit = function () {
 		});
 
 		$("#btnSelect1").click(function (e) {
+			e.preventDefault();
 			selector1.showFriendSelector();
 		});
 
 		$("#btnSelect2").click(function (e) {
+			e.preventDefault();
 			selector2.showFriendSelector();
 		});
 

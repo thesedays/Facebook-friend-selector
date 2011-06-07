@@ -8,11 +8,11 @@
 var TDFriendSelector = (function(module, $) {
 
 	// Public functions
-	var init, setFriends, newInstance,
+	var init, setFriends, getFriends, getFriendById, newInstance,
 
 	// Private variables
 	settings, friends,
-	$container, $friendsMask, $friendsContainer, $friends, $countContainer, $countTotalContainer, $pageContainer, $pageCountContainer, $pageCountTotalContainer, $pagePrev, $pageNext, $searchContainer, $searchField, $searchList, $buttonClose, $buttonOK,
+	$friends, $container, $friendsMask, $friendsContainer, $searchField, $selectedCount, $selectedCountMax, $pageNumber, $pageNumberTotal, $pagePrev, $pageNext, $buttonClose, $buttonOK,
 
 	// Private functions
 	buildFriendSelector, sortFriends, log;
@@ -28,35 +28,41 @@ var TDFriendSelector = (function(module, $) {
 
 		// Default settings
 		settings = {
-			containerSelector : '#tdfriendselector',
-			speed             : 500,
-			debug             : false,
-			disabledClass     : 'tdfriendselector_disabled'
+			speed                    : 500,
+			debug                    : false,
+			disabledClass            : 'tdfriendselector_disabled',
+			friendSelectedClass      : 'tdfriendselector_friendSelected',
+			friendDisabledClass      : 'tdfriendselector_friendDisabled',
+			containerSelector        : '#tdfriendselector',
+			friendsMaskSelector      : '.tdfriendselector_friendsMask',
+			friendsContainerSelector : '.tdfriendselector_friendsContainer',
+			searchFieldSelector      : '#tdfriendselector_searchField',
+			selectedCountSelector    : '.tdfriendselector_selectedCount',
+			selectedCountMaxSelector : '.tdfriendselector_selectedCountMax',
+			pageNumberSelector       : '#tdfriendselector_pageNumber',
+			pageNumberTotalSelector  : '#tdfriendselector_pageNumberTotal',
+			pagePrevSelector         : '#tdfriendselector_pagePrev',
+			pageNextSelector         : '#tdfriendselector_pageNext',
+			buttonCloseSelector      : '#tdfriendselector_buttonClose',
+			buttonOKSelector         : '#tdfriendselector_buttonOK'
 		};
 
 		// Override defaults with arguments
 		$.extend(settings, options);
 
 		// Select DOM elements
-		$container = $(settings.containerSelector);
-		$friendsMask = $container.find('.tdfriendselector_friendsMask');
-		$friendsContainer = $container.find('.tdfriendselector_list');
-		$countContainer = $container.find('.tdfriendselector_count');
-		$countTotalContainer = $container.find('.tdfriendselector_total');
-
-		$pageContainer = $container.find('.tdfriendselector_paging');
-		$pageCountContainer = $container.find('.tdfriendselector_pagingCount');
-		$pageCountTotalContainer = $container.find('.tdfriendselector_pagingTotal');
-
-		$pagePrev = $container.find('.tdfriendselector_prevPage');
-		$pageNext = $container.find('.tdfriendselector_nextPage');
-
-		$searchContainer = $container.find('.tdfriendselector_search_form');
-		$searchField = $searchContainer.find('.tdfriendselector_text');
-		$searchList = $container.find('.fb_search_list ul');
-
-		$buttonClose = $container.find('.tdfriendselector_close');
-		$buttonOK = $container.find('.tdfriendselector_ok');
+		$container        = $(settings.containerSelector);
+		$friendsMask      = $container.find(settings.friendsMaskSelector);
+		$friendsContainer = $container.find(settings.friendsContainerSelector);
+		$searchField      = $container.find(settings.searchFieldSelector);
+		$selectedCount    = $container.find(settings.selectedCountSelector);
+		$selectedCountMax = $container.find(settings.selectedCountMaxSelector);
+		$pageNumber       = $container.find(settings.pageNumberSelector);
+		$pageNumberTotal  = $container.find(settings.pageNumberTotalSelector);
+		$pagePrev         = $container.find(settings.pagePrevSelector);
+		$pageNext         = $container.find(settings.pageNextSelector);
+		$buttonClose      = $container.find(settings.buttonCloseSelector);
+		$buttonOK         = $container.find(settings.buttonOKSelector);
 	};
 
 	/**
@@ -64,6 +70,23 @@ var TDFriendSelector = (function(module, $) {
 	 */
 	setFriends = function(input) {
 		friends = Array.prototype.slice.call(input).sort(sortFriends);
+	};
+
+	getFriends = function() {
+		return friends;
+	};
+
+	/**
+	 * Use this function if you have a friend ID and need to know their name
+	 */
+	getFriendById = function(id) {
+		var i, len;
+		for (i = 0, len = friends.length; i < len; i += 1) {
+			if ('' + friends[i].id === '' + id) {
+				return friends[i];
+			}
+		}
+		return null;
 	};
 
 	/**
@@ -110,21 +133,21 @@ var TDFriendSelector = (function(module, $) {
 			} else {
 				bindEvents();
 				// Update classnames to represent the selections for this instance
-				$friends.removeClass("tdfriendselector_friendSelected tdfriendselector_friendDisabled");
+				$friends.removeClass(settings.friendSelectedClass + ' ' + settings.friendDisabledClass);
 				for (i = 0, len = friends.length; i < len; i += 1) {
 					if ($.inArray(friends[i].id, selectedFriendIds) !== -1) {
-						$($friends[i]).addClass("tdfriendselector_friendSelected");
+						$($friends[i]).addClass(settings.friendSelectedClass);
 					}
 					if ($.inArray(friends[i].id, disabledFriendIds) !== -1) {
-						$($friends[i]).addClass("tdfriendselector_friendDisabled");
+						$($friends[i]).addClass(settings.friendDisabledClass);
 					}
 				}
 				// Update paging
 				$friendsMask.height(instanceSettings.friendsPerPage * instanceSettings.friendHeight);
 				$friendsContainer.css({top: 0});
-				$countTotalContainer.html(instanceSettings.maxSelection);
+				$selectedCountMax.html(instanceSettings.maxSelection);
 				numPages = Math.ceil(friends.length / instanceSettings.friendsPerPage);
-				$pageCountTotalContainer.html(numPages);
+				$pageNumberTotal.html(numPages);
 				updatePaginationButtons(1);
 				$container.fadeIn(500);
 			}
@@ -168,7 +191,7 @@ var TDFriendSelector = (function(module, $) {
 			});
 
 			$pagePrev.bind('click', function(e) {
-				var pageNumber = parseInt($pageCountContainer.text(), 10) - 1;
+				var pageNumber = parseInt($pageNumber.text(), 10) - 1;
 				e.preventDefault();
 				if (pageNumber < 1) { return; }
 				$friendsContainer.css({top: 0 - (pageNumber * instanceSettings.friendsPerPage * instanceSettings.friendHeight)});
@@ -176,7 +199,7 @@ var TDFriendSelector = (function(module, $) {
 			});
 
 			$pageNext.bind('click', function(e) {
-				var pageNumber = parseInt($pageCountContainer.text(), 10) + 1, numPages = Math.ceil(friends.length / instanceSettings.friendsPerPage);
+				var pageNumber = parseInt($pageNumber.text(), 10) + 1, numPages = Math.ceil(friends.length / instanceSettings.friendsPerPage);
 				e.preventDefault();
 				if (pageNumber > numPages) { return; }
 				$friendsContainer.css({top: 0 - (pageNumber * instanceSettings.friendsPerPage * instanceSettings.friendHeight)});
@@ -195,7 +218,7 @@ var TDFriendSelector = (function(module, $) {
 
 		updatePaginationButtons = function(pageNumber) {
 			var numPages = Math.ceil(friends.length / instanceSettings.friendsPerPage);
-			$pageCountContainer.html(pageNumber);
+			$pageNumber.html(pageNumber);
 			if (pageNumber === 1 || numPages === 1) {
 				$pagePrev.addClass(settings.disabledClass);
 			} else {
@@ -209,20 +232,18 @@ var TDFriendSelector = (function(module, $) {
 		};
 
 		selectFriend = function($friend) {
-			var friendId, i, len, name;
-
+			var friendId, i, len;
 			friendId = $friend.attr('data-id');
-			name = $friend.find('.tdfriendselector_friendName span:first').text();
 
-			if (!$friend.hasClass('tdfriendselector_friendSelected')) {
+			if (!$friend.hasClass(settings.friendSelectedClass)) {
 				if (selectedFriendIds.length < instanceSettings.maxSelection) {
 					// Add friend to selectedFriendIds
 					if ($.inArray(friendId, selectedFriendIds) === -1) {
 						selectedFriendIds.push(friendId);
-						$friend.addClass('tdfriendselector_friendSelected');
-						$countContainer.html(selectedFriendIds.length);
+						$friend.addClass(settings.friendSelectedClass);
+						$selectedCount.html(selectedFriendIds.length);
 						log('TDFriendSelector - newInstance - selectFriend - selected IDs: ', selectedFriendIds);
-						$friend.trigger('TDFriendSelector_friendSelected', [friendId, name]);
+						$friend.trigger('TDFriendSelector_friendSelected', [friendId]);
 					} else {
 						log('TDFriendSelector - newInstance - selectFriend - ID already stored');
 					}
@@ -233,8 +254,8 @@ var TDFriendSelector = (function(module, $) {
 				for (i = 0, len = selectedFriendIds.length; i < len; i += 1) {
 					if (selectedFriendIds[i] === friendId) {
 						selectedFriendIds.splice(i, 1);
-						$friend.removeClass('tdfriendselector_friendSelected');
-						$countContainer.html(selectedFriendIds.length);
+						$friend.removeClass(settings.friendSelectedClass);
+						$selectedCount.html(selectedFriendIds.length);
 						$friend.trigger('TDFriendSelector_friendUnselected', [friendId, name]);
 						return false;
 					}

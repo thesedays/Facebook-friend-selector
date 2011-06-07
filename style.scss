@@ -25,26 +25,27 @@
 	/* The interface */
 	.tdfriendselector_dialog {
 		width: $friendWidth + 22; padding: 10px; margin: 0 auto; position: relative; background: rgba(82, 82, 82, 0.7); @include borderRadius(8px);
-		.tdfriendselector_close {
+		#tdfriendselector_buttonClose {
 			position: absolute; right: 18px; top: 15px; font-size: 16px;
 			&, &:active, &:hover, &:visited { color: #FFF; }
 		}
 		.tdfriendselector_form { border: 1px solid #3B5998; }
 		.tdfriendselector_header { padding: 7px 10px; background: #6D84B4; color: #FFF; font-size: 14px; font-weight: bold; }
 		.tdfriendselector_content { background: #FFF; padding: 10px; }
-		.tdfriendselector_search { background: #f1f1f1; border: 1px solid #cacaca; border-width: 1px 0; margin-top: 10px; padding: 10px; text-align: right; }
-		.tdfriendselector_searchForm { float: right; }
-		.tdfriendselector_countContainer { font-weight: bold; float: left; }
-		.tdfriendselector_submitButton { display: none; }
+		.tdfriendselector_searchContainer {
+			margin-top: 10px; padding: 10px; background: #f1f1f1; border: solid #cacaca; border-width: 1px 0;
+			.tdfriendselector_selectedCountContainer { font-weight: bold; float: left; padding: 3px 0; }
+			#tdfriendselector_searchField { float: right; }
+		}
 		.tdfriendselector_friendsMask { width: $friendWidth; margin: 10px 0 0; position: relative; overflow: hidden; }
-		.tdfriendselector_list {
+		.tdfriendselector_friendsContainer {
 			width: $friendWidth; position: absolute; top: 0; left: 0;
 			.tdfriendselector_friend {
 				display: block; padding: 5px 10px; margin-bottom: 2px; border-bottom: 1px solid #cacaca; cursor: pointer;
 				.tdfriendselector_friendAvatar { float: left; height: 50px; width: 50px; }
 				.tdfriendselector_friendName { float: left; font-size: 14px; font-weight: bold; padding: 17px 0 17px 20px; position: relative; width: 280px; }
-				.tdfriendselector_friendSelect { text-align: right; color: #666; display: none; font-size: 10px; font-weight: normal; position: absolute; right: 0; top: 19px; }
-				&:hover .tdfriendselector_friendName .tdfriendselector_friendSelect { display: block; }
+				.tdfriendselector_friendSelect { display: none; position: absolute; right: 0; top: 19px; text-align: right; color: #666; font-size: 10px; font-weight: normal; }
+				&:hover .tdfriendselector_friendSelect { display: block; }
 
 				/* Selected friends */
 				&.tdfriendselector_friendSelected { background: #f0f0f0; }
@@ -58,13 +59,13 @@
 		}
 		.tdfriendselector_footer {
 			padding: 8px 10px; background: #F2F2F2; border-top: 1px solid #CCC;
-			.tdfriendselector_prevPage, .tdfriendselector_nextPage { background: #e2e4e4; border: 1px solid #979797; float: left; height: 20px; width: 20px; position: relative; overflow: hidden; text-indent: -999em; }
-			.tdfriendselector_prevPage { background: url(images/fb_dialog_previous.png) no-repeat center center scroll; }
-			.tdfriendselector_nextPage { background: url(images/fb_dialog_next.png) no-repeat center center scroll; }
-			.tdfriendselector_prevPage.tdfriendselector_disabled { background: #f1f1f1; border: 1px solid #c6c6c6; background: url(images/fb_dialog_previous_disabled.png) no-repeat center center scroll; }
-			.tdfriendselector_nextPage.tdfriendselector_disabled { background: #f1f1f1; border: 1px solid #c6c6c6; background: url(images/fb_dialog_next_disabled.png) no-repeat center center scroll; }
-			.tdfriendselector_paging { float: left; padding: 4px 0 0 6px; }
-			.tdfriendselector_ok { float: right; background: #3B5998; color: #FFF; padding: 4px 20px 5px 20px; border: 1px solid; border-color: #D9DFEA #0E1F5B #0E1F5B #D9DFEA; }
+			#tdfriendselector_pagePrev, #tdfriendselector_pageNext { background: #e2e4e4; border: 1px solid #979797; float: left; height: 20px; width: 20px; position: relative; overflow: hidden; text-indent: -999em; }
+			#tdfriendselector_pagePrev { background: url(images/fb_dialog_previous.png) no-repeat center center scroll; }
+			#tdfriendselector_pageNext { background: url(images/fb_dialog_next.png) no-repeat center center scroll; }
+			#tdfriendselector_pagePrev.tdfriendselector_disabled { background: #f1f1f1; border: 1px solid #c6c6c6; background: url(images/fb_dialog_previous_disabled.png) no-repeat center center scroll; }
+			#tdfriendselector_pageNext.tdfriendselector_disabled { background: #f1f1f1; border: 1px solid #c6c6c6; background: url(images/fb_dialog_next_disabled.png) no-repeat center center scroll; }
+			.tdfriendselector_pageNumberContainer { float: left; padding: 4px 0 0 6px; }
+			#tdfriendselector_buttonOK { float: right; background: #3B5998; color: #FFF; padding: 4px 20px 5px 20px; border: 1px solid; border-color: #D9DFEA #0E1F5B #0E1F5B #D9DFEA; }
 		}
 	}
 }

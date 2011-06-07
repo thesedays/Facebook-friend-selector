@@ -16,36 +16,28 @@
 
 		<div id="tdfriendselector">
 			<div class="tdfriendselector_dialog">
-				<a href="#" class="tdfriendselector_close">x</a>
+				<a href="#" id="tdfriendselector_buttonClose">x</a>
 				<form action="" method="post" class="tdfriendselector_form">
 					<div class="tdfriendselector_header">
 						<p>Select your friends</p>
 					</div>
 					<div class="tdfriendselector_content">
-						<div class="tdfriendselector_copy">
-							<p>Then you can invite them to join you in the app.</p>
-						</div>
-						<div class="tdfriendselector_search tdfriendselector_clearfix">
-							<div class="tdfriendselector_countContainer">
-								<p><span class="tdfriendselector_count">0</span> / <span class="tdfriendselector_total">0</span> friends selected</p>
-							</div>
-							<div class="tdfriendselector_searchForm">
-								<input type="text" value="Search friends" class="tdfriendselector_text" />
-									<a href="#" class="tdfriendselector_submitLink"><span>Search</span></a>
-								<input type="submit" value="search" class="tdfriendselector_submitButton" />
-							</div>
+						<p>Then you can invite them to join you in the app.</p>
+						<div class="tdfriendselector_searchContainer tdfriendselector_clearfix">
+							<div class="tdfriendselector_selectedCountContainer"><span class="tdfriendselector_selectedCount">0</span> / <span class="tdfriendselector_selectedCountMax">0</span> friends selected</div>
+							<input type="text" placeholder="Search friends" id="tdfriendselector_searchField" />
 						</div>
 						<div class="tdfriendselector_friendsMask">
-							<div class="tdfriendselector_list"></div>
+							<div class="tdfriendselector_friendsContainer"></div>
 						</div>
 					</div>
 					<div class="tdfriendselector_footer tdfriendselector_clearfix">
-						<a href="#" class="tdfriendselector_prevPage tdfriendselector_disabled">Previous</a>
-						<a href="#" class="tdfriendselector_nextPage">Next</a>
-						<div class="tdfriendselector_paging">
-							Page <span class="tdfriendselector_pagingCount">1</span> / <span class="tdfriendselector_pagingTotal">1</span>
+						<a href="#" id="tdfriendselector_pagePrev" class="tdfriendselector_disabled">Previous</a>
+						<a href="#" id="tdfriendselector_pageNext">Next</a>
+						<div class="tdfriendselector_pageNumberContainer">
+							Page <span class="tdfriendselector_pageNumber">1</span> / <span class="tdfriendselector_pageNumberTotal">1</span>
 						</div>
-						<a class="tdfriendselector_ok" href="#">OK</a>
+						<a href="#" id="tdfriendselector_buttonOK">OK</a>
 					</div>
 				</form>
 			</div>
