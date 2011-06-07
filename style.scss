@@ -55,6 +55,9 @@
 					cursor: default; opacity: .5; filter: alpha(opacity=50); -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
 					&:hover .tdfriendselector_friendSelect { display: none; }
 				}
+
+				/* Filtered friends are not shown */
+				&.tdfriendselector_friendFiltered { display: none }
 			}
 		}
 		.tdfriendselector_footer {

@@ -33,6 +33,7 @@ var TDFriendSelector = (function(module, $) {
 			disabledClass            : 'tdfriendselector_disabled',
 			friendSelectedClass      : 'tdfriendselector_friendSelected',
 			friendDisabledClass      : 'tdfriendselector_friendDisabled',
+			friendFilteredClass      : 'tdfriendselector_friendFiltered',
 			containerSelector        : '#tdfriendselector',
 			friendsMaskSelector      : '.tdfriendselector_friendsMask',
 			friendsContainerSelector : '.tdfriendselector_friendsContainer',
@@ -69,7 +70,13 @@ var TDFriendSelector = (function(module, $) {
 	 * If your website has already loaded the user's Facebook friends, pass them in here to avoid another API call.
 	 */
 	setFriends = function(input) {
-		friends = Array.prototype.slice.call(input).sort(sortFriends);
+		var i, len;
+		input = Array.prototype.slice.call(input);
+		for (i = 0, len = input.length; i < len; i += 1) {
+			input[i].sortName = input[i].name.toUpperCase();
+		}
+		input = input.sort(sortFriends);
+		friends = input;
 	};
 
 	getFriends = function() {
@@ -95,10 +102,10 @@ var TDFriendSelector = (function(module, $) {
 	 */
 	newInstance = function(options) {
 		// Public functions
-		var showFriendSelector, hideFriendSelector, getselectedFriendIds, setDisabledFriendIds,
+		var showFriendSelector, hideFriendSelector, getselectedFriendIds, setDisabledFriendIds, filterFriends,
 
 		// Private variables
-		instanceSettings, selectedFriendIds = [], disabledFriendIds = [],
+		instanceSettings, selectedFriendIds = [], disabledFriendIds = [], numFilteredFriends = 0,
 
 		// Private functions
 		bindEvents, unbindEvents, updatePaginationButtons, selectFriend;
@@ -126,14 +133,14 @@ var TDFriendSelector = (function(module, $) {
 		 * Call this function to show the interface
 		 */
 		showFriendSelector = function() {
-			var i, len, numPages;
+			var i, len;
 			log('TDFriendSelector - newInstance - showFriendSelector');
 			if (!friends) {
 				return buildFriendSelector(showFriendSelector);
 			} else {
 				bindEvents();
 				// Update classnames to represent the selections for this instance
-				$friends.removeClass(settings.friendSelectedClass + ' ' + settings.friendDisabledClass);
+				$friends.removeClass(settings.friendSelectedClass + ' ' + settings.friendDisabledClass + ' ' + settings.friendFilteredClass);
 				for (i = 0, len = friends.length; i < len; i += 1) {
 					if ($.inArray(friends[i].id, selectedFriendIds) !== -1) {
 						$($friends[i]).addClass(settings.friendSelectedClass);
@@ -142,12 +149,13 @@ var TDFriendSelector = (function(module, $) {
 						$($friends[i]).addClass(settings.friendDisabledClass);
 					}
 				}
+				// Reset filtering
+				numFilteredFriends = 0;
+				$searchField.val("");
 				// Update paging
 				$friendsMask.height(instanceSettings.friendsPerPage * instanceSettings.friendHeight);
 				$friendsContainer.css({top: 0});
 				$selectedCountMax.html(instanceSettings.maxSelection);
-				numPages = Math.ceil(friends.length / instanceSettings.friendsPerPage);
-				$pageNumberTotal.html(numPages);
 				updatePaginationButtons(1);
 				$container.fadeIn(500);
 			}
@@ -169,6 +177,26 @@ var TDFriendSelector = (function(module, $) {
 			disabledFriendIds = input;
 		};
 
+		/**
+		 * Hides friends whose names do not match the filter
+		 */
+		filterFriends = function(filter) {
+			var i, len;
+			numFilteredFriends = 0;
+			$friends.removeClass(settings.friendFilteredClass);
+			$friendsContainer.css({top: 0});
+			if (filter.length > 2) {
+				filter = filter.toUpperCase();
+				for (i = 0, len = friends.length; i < len; i += 1) {
+					if (friends[i].sortName.indexOf(filter) === -1) {
+						$($friends[i]).addClass(settings.friendFilteredClass);
+						numFilteredFriends += 1;
+					}
+				}
+			}
+			updatePaginationButtons(1);
+		};
+
 		/////////////////////////////////////////
 		// PRIVATE FUNCTIONS FOR AN INSTANCE
 		/////////////////////////////////////////
@@ -188,6 +216,10 @@ var TDFriendSelector = (function(module, $) {
 			$friends.bind('click', function(e) {
 				e.preventDefault();
 				selectFriend($(this));
+			});
+
+			$searchField.bind('keyup', function(e) {
+				filterFriends($(this).val());
 			});
 
 			$pagePrev.bind('click', function(e) {
@@ -212,13 +244,15 @@ var TDFriendSelector = (function(module, $) {
 			$buttonClose.unbind('click');
 			$buttonOK.unbind('click');
 			$friends.unbind('click');
+			$searchField.unbind('keyup');
 			$pagePrev.unbind('click');
 			$pageNext.unbind('click');
 		};
 
 		updatePaginationButtons = function(pageNumber) {
-			var numPages = Math.ceil(friends.length / instanceSettings.friendsPerPage);
+			var numPages = Math.ceil((friends.length - numFilteredFriends) / instanceSettings.friendsPerPage);
 			$pageNumber.html(pageNumber);
+			$pageNumberTotal.html(numPages);
 			if (pageNumber === 1 || numPages === 1) {
 				$pagePrev.addClass(settings.disabledClass);
 			} else {
@@ -269,7 +303,8 @@ var TDFriendSelector = (function(module, $) {
 		return {
 			showFriendSelector: showFriendSelector,
 			hideFriendSelector: hideFriendSelector,
-			getselectedFriendIds: getselectedFriendIds
+			getselectedFriendIds: getselectedFriendIds,
+			filterFriends: filterFriends
 		};
 	};
 
@@ -335,9 +370,9 @@ var TDFriendSelector = (function(module, $) {
 	};
 
 	sortFriends = function(friend1, friend2) {
-		if (friend1.name === friend2.name) { return 0; }
-		if (friend1.name > friend2.name) { return 1; }
-		if (friend1.name < friend2.name) { return -1; }
+		if (friend1.sortName === friend2.sortName) { return 0; }
+		if (friend1.sortName > friend2.sortName) { return 1; }
+		if (friend1.sortName < friend2.sortName) { return -1; }
 	};
 
 	log = function() {
@@ -349,6 +384,8 @@ var TDFriendSelector = (function(module, $) {
 	module = {
 		init: init,
 		setFriends: setFriends,
+		getFriends: getFriends,
+		getFriendById: getFriendById,
 		newInstance: newInstance
 	};
 	return module;
