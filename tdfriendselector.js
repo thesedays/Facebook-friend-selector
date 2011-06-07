@@ -67,7 +67,7 @@ var FBFSelector = (function(module, $) {
 		$pageCountTotalContainer = $container.find('.tdfriendselector_pagingTotal');
 
 		$pagePrev = $container.find('.tdfriendselector_prevPage');
-		$pageNext = $container.find('.tdfriendselector_prevNext');
+		$pageNext = $container.find('.tdfriendselector_nextPage');
 
 		$searchContainer = $container.find('.tdfriendselector_search_form');
 		$searchField = $searchContainer.find('.tdfriendselector_text');

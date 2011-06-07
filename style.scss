@@ -56,11 +56,11 @@
 		}
 		.tdfriendselector_footer {
 			padding: 8px 10px; background: #F2F2F2; border-top: 1px solid #CCC;
-			.tdfriendselector_prevNext, .tdfriendselector_prevPage { background: #e2e4e4; border: 1px solid #979797; float: left; height: 20px; width: 20px; position: relative; overflow: hidden; text-indent: -999em; }
-			.tdfriendselector_prevNext { background: url(images/fb_dialog_next.png) no-repeat center center scroll; }
+			.tdfriendselector_prevPage, .tdfriendselector_nextPage { background: #e2e4e4; border: 1px solid #979797; float: left; height: 20px; width: 20px; position: relative; overflow: hidden; text-indent: -999em; }
 			.tdfriendselector_prevPage { background: url(images/fb_dialog_previous.png) no-repeat center center scroll; }
-			.tdfriendselector_prevNext.tdfriendselector_disabled { background: #f1f1f1; border: 1px solid #c6c6c6; background: url(images/fb_dialog_next_disabled.png) no-repeat center center scroll; }
+			.tdfriendselector_nextPage { background: url(images/fb_dialog_next.png) no-repeat center center scroll; }
 			.tdfriendselector_prevPage.tdfriendselector_disabled { background: #f1f1f1; border: 1px solid #c6c6c6; background: url(images/fb_dialog_previous_disabled.png) no-repeat center center scroll; }
+			.tdfriendselector_nextPage.tdfriendselector_disabled { background: #f1f1f1; border: 1px solid #c6c6c6; background: url(images/fb_dialog_next_disabled.png) no-repeat center center scroll; }
 			.tdfriendselector_paging { float: left; padding: 4px 0 0 6px; }
 			.tdfriendselector_ok { float: right; background: #3B5998; color: #FFF; padding: 4px 20px 5px 20px; border: 1px solid; border-color: #D9DFEA #0E1F5B #0E1F5B #D9DFEA; }
 		}
