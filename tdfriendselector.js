@@ -299,12 +299,15 @@ var FBFSelector = (function(module, $) {
 			}
 		}
 
-		f_html = '<li class="fb_friend clearfix' + sclass + '" data-rel="f_rel" data-id="f_id"><a href="#" class="fb_friend_link"><div class="fb_friend_avatar left"><img src="f_avatar" width="50" height="50" alt="f_name" /></div><div class="fb_friend_name left"><span>f_name</span><span class="fb_friend_select">select</span></div></a></li>';
-
-		f_html = f_html.replace(/f_rel/g, rel);
-		f_html = f_html.replace(/f_id/g, friend.id);
-		f_html = f_html.replace(/f_avatar/g, f_avatar);
-		f_html = f_html.replace(/f_name/g, friend.name);
+		f_html = '<li class="fb_friend clearfix' + sclass + '" data-rel="' + rel + '" data-id="' + friend.id + '">' +
+				'<a href="#" class="fb_friend_link">' +
+					'<img src="' + f_avatar + '" width="50" height="50" alt="' + friend.name + '" class="fb_friend_avatar" />' +
+					'<div class="fb_friend_name">' + 
+						'<span>' + friend.name + '</span>' +
+						'<span class="fb_friend_select">select</span>' +
+					'</div>' +
+				'</a>' +
+			'</li>';
 
 		//log('FBFSelector - buildFriend - f_html: ', f_html);
 		return f_html;

@@ -8,9 +8,6 @@
 .clearfix:after { clear: both; }
 .clearfix { zoom: 1; }
 
-.left { float: left; }
-.right { float: right; }
-
 body { overflow-y: scroll; }
 
 /*
@@ -18,10 +15,9 @@ body { overflow-y: scroll; }
 	@author Bram Verdyck
 */
 #fb_friends {
-	display: none; height: 100%; left: 0; position: absolute; top: 0; width: 100%; padding: 10px 0 0; z-index: 1000; color: #333; font-family: "lucida grande", tahoma, verdana, arial, sans-serif; font-size: 11px;
+	display: none; width: 100%; padding: 10px 0 0; position: absolute; left: 0; top: 0; z-index: 1000; color: #333; font-family: "lucida grande", tahoma, verdana, arial, sans-serif; font-size: 11px;
 	a, a:active, a:hover, a:visited { text-decoration: none; color: #3B5998; }
-	p { margin: 0; padding: 0; }
-	ul, li { margin: 0; padding: 0; }
+	p, ul, li { margin: 0; padding: 0; }
 	.fb_friends_dialog {
 		position: relative; width: 400px; background: rgba(82, 82, 82, 0.7); @include borderRadius(8px); padding: 10px; margin: 0 auto;
 		.fb_friends_close {
@@ -45,8 +41,9 @@ body { overflow-y: scroll; }
 					&.prestored a { cursor: default; }
 					&.prestored a:hover .fb_friend_name .fb_friend_select { display: none; }
 					.fb_friend_link { cursor: pointer; }
-					.fb_friend_name { display: inline-block; font-size: 14px; font-weight: bold; padding: 17px 0 17px 20px; position: relative; width: 280px; }
-					.fb_friend_name .fb_friend_select { text-align: right; color: #666; display: none; font-size: 10px; font-weight: normal; position: absolute; right: 10px; top: 19px; }
+					.fb_friend_avatar { float: left; height: 50px; width: 50px; }
+					.fb_friend_name { float: left; font-size: 14px; font-weight: bold; padding: 17px 0 17px 20px; position: relative; width: 280px; }
+					.fb_friend_name .fb_friend_select { text-align: right; color: #666; display: none; font-size: 10px; font-weight: normal; position: absolute; right: 0; top: 19px; }
 					a:hover .fb_friend_name .fb_friend_select { display: block; }
 				}
 			}
