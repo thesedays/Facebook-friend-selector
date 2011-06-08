@@ -26,7 +26,7 @@ Just edit `example.js` and set your Facebook `appId`.
 ### Include required JavaScript
 
 - Include jQuery in your document. We are considering making this plugin library independent, but currently jQuery is required.
-- Include the Facebook [JavaScript SDK](http://developers.facebook.com/docs/reference/javascript/). (Technically, this step is optional. We have provided a `setFriends` function if you have loaded the users Facebook friends on the serverside and want to avoid the JavaScript SDK.)
+- Include the Facebook [JavaScript SDK](http://developers.facebook.com/docs/reference/javascript/). (Technically, this step is optional. We have provided a `setFriends` function if you have loaded the friends on the serverside and want to avoid the JavaScript SDK.)
 - Include `tdfriendselector.js`.
 - Optional: We are using an HTML5 placeholder attribute on the search field. If you want the placeholder to work in older browsers, include a [placeholder polyfill](https://github.com/mathiasbynens/Placeholder-jQuery-Plugin).
 - Note: we haven't minified the script for you but you might like to [minify it](http://refresh-sf.com/yui/) and concatenate it into a single file with your other plugins.
@@ -39,7 +39,7 @@ Just edit `example.js` and set your Facebook `appId`.
 
 	TDFriendSelector.init({debug: true});
 
-3 - Create an instance of the plugin. We allow multiple instances per page because sometimes you will need users to select friends for more than one thing.
+3 - Create an instance of the plugin. We allow multiple instances per page because sometimes you will need users to select friends for more than one thing. You can pass in options here which will only effect this instance, for example, number of friends per screen and maximum selection number.
 
 	selector1 = TDFriendSelector.newInstance();
 
@@ -49,7 +49,7 @@ Just edit `example.js` and set your Facebook `appId`.
 		console.log('The following friends were selected: ' + selectedFriendIds.join(", "));
 	};);
 
-5 - Open the plugin instance.
+5 - Display the plugin instance when you need it. The plugin will automatically load the Facebook friends of the logged in user (and they will be cached and reused across all instances on the page).
 
 	$("#btnSelect1").click(function (e) {
 		e.preventDefault();
