@@ -31,22 +31,23 @@ Just edit `example.js` and set your Facebook `appId`.
 
 ### The fun stuff (using the plugin)
 
-1. Make sure your user has authenticated your Facebook app.
-2. Initialise the plugin. Here you can set options like toggling debug messages, your preferred classnames, etc.
+Make sure your user has authenticated your Facebook app.
+
+Initialise the plugin. Here you can set options like toggling debug messages, your preferred classnames, etc.
 
 	TDFriendSelector.init({debug: true});
 
-3. Create an instance of the plugin. We allow multiple instances per page because sometimes you will need users to select friends for more than one thing.
+Create an instance of the plugin. We allow multiple instances per page because sometimes you will need users to select friends for more than one thing.
 
 	selector1 = TDFriendSelector.newInstance();
 
-4. Set a callback to deal with the friends that are selected.
+Set a callback to deal with the friends that are selected.
 
 	selector1.setCallbackSubmit(function(selectedFriendIds) {
 		console.log('The following friends were selected: ' + selectedFriendIds.join(", "));
 	};);
 
-5. Open the plugin instance.
+Open the plugin instance.
 
 	$("#btnSelect1").click(function (e) {
 		e.preventDefault();
