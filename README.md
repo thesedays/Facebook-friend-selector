@@ -3,6 +3,8 @@ Welcome to the These Days Friend Selector
 
 This is an interface component for websites and Facebook applications which allows your users to make a selection of one or more of their friends. The friends are returned as an array of Facebook IDs. It is similar to the `fb:multi-friend-selector` component by Facebook, except it can be used to select friends for anything, not just application requests.
 
+![This is what it looks like.](http://playground.thesedays.com/tdfriendselector/screenshot-20110608.png)
+
 ## Viewing the example
 
 You can view the example at [These Days Labs](http://playground.thesedays.com/tdfriendselector/), or you can check out this repository and run it yourself. You'll need to put the files on a web server - Facebook apps won't run off the local file system.
