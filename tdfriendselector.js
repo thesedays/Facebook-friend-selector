@@ -15,7 +15,7 @@ var TDFriendSelector = (function(module, $) {
 	$friends, $container, $friendsMask, $friendsContainer, $searchField, $selectedCount, $selectedCountMax, $pageNumber, $pageNumberTotal, $pagePrev, $pageNext, $buttonClose, $buttonOK,
 
 	// Private functions
-	buildFriendSelector, sortFriends, log;
+	$getFriendById, buildFriendSelector, sortFriends, log;
 
 	/////////////////////////////////////////
 	// PUBLIC FUNCTIONS FOR GLOBAL PLUGIN
@@ -124,7 +124,8 @@ var TDFriendSelector = (function(module, $) {
 		instanceSettings = {
 			maxSelection      : 4,
 			friendsPerPage    : 10,
-			friendHeight      : 64
+			friendHeight      : 64,
+			autoDeselection   : false // Allow the user to keep on selecting once they reach maxSelection, and just deselect the first selected friends
 		};
 
 		// Override defaults with arguments
@@ -278,10 +279,16 @@ var TDFriendSelector = (function(module, $) {
 		};
 
 		selectFriend = function($friend) {
-			var friendId, i, len;
+			var friendId, i, len, removedId;
 			friendId = $friend.attr('data-id');
 
 			if (!$friend.hasClass(settings.friendSelectedClass)) {
+				// If autoDeselection is enabled and they have already selected the max number of friends, deselect the first friend
+				if (instanceSettings.autoDeselection && selectedFriendIds.length === instanceSettings.maxSelection) {
+					removedId = selectedFriendIds.splice(0, 1);
+					$getFriendById(removedId).removeClass(settings.friendSelectedClass);
+					$selectedCount.html(selectedFriendIds.length);
+				}
 				if (selectedFriendIds.length < instanceSettings.maxSelection) {
 					// Add friend to selectedFriendIds
 					if ($.inArray(friendId, selectedFriendIds) === -1) {
@@ -329,6 +336,16 @@ var TDFriendSelector = (function(module, $) {
 	/////////////////////////////////////////
 	// PRIVATE FUNCTIONS FOR GLOBAL PLUGIN
 	/////////////////////////////////////////
+
+	$getFriendById = function(id) {
+		var i, len;
+		for (i = 0, len = friends.length; i < len; i += 1) {
+			if ('' + friends[i].id === '' + id) {
+				return $($friends[i]);
+			}
+		}
+		return $("");
+	};
 
 	/**
 	 * Load the Facebook friends and build the markup
