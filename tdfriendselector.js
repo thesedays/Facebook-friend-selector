@@ -342,6 +342,7 @@ var TDFriendSelector = (function(module, $) {
 			showFriendSelector          : showFriendSelector,
 			hideFriendSelector          : hideFriendSelector,
 			getselectedFriendIds        : getselectedFriendIds,
+			setDisabledFriendIds        : setDisabledFriendIds,
 			filterFriends               : filterFriends,
 			reset                       : reset,
 			setCallbackFriendSelected   : setCallbackFriendSelected,
