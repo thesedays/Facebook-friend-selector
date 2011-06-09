@@ -72,7 +72,7 @@ var TDFriendSelector = (function(module, $) {
 	 */
 	setFriends = function(input) {
 		var i, len;
-		if (!input) {
+		if (!input || input.length === 0) {
 			return;
 		}
 		input = Array.prototype.slice.call(input);
@@ -106,7 +106,7 @@ var TDFriendSelector = (function(module, $) {
 	 */
 	newInstance = function(options) {
 		// Public functions
-		var showFriendSelector, hideFriendSelector, getselectedFriendIds, setDisabledFriendIds, filterFriends,
+		var showFriendSelector, hideFriendSelector, getselectedFriendIds, setDisabledFriendIds, filterFriends, reset,
 		setCallbackFriendSelected, setCallbackFriendUnselected, setCallbackMaxSelection, setCallbackSubmit,
 
 		// Private variables
@@ -202,6 +202,22 @@ var TDFriendSelector = (function(module, $) {
 					}
 				}
 			}
+			updatePaginationButtons(1);
+		};
+
+		/**
+		 * Remove selections, clear disabled list, go to page 1, etc
+		 */
+		reset = function() {
+			if (!friends || friends.length === 0) {
+				return;
+			}
+			selectedFriendIds = [];
+			$selectedCount.html("");
+			disabledFriendIds = [];
+			numFilteredFriends = 0;
+			$searchField.val("");
+			$friendsContainer.css({top: 0});
 			updatePaginationButtons(1);
 		};
 
@@ -327,6 +343,7 @@ var TDFriendSelector = (function(module, $) {
 			hideFriendSelector          : hideFriendSelector,
 			getselectedFriendIds        : getselectedFriendIds,
 			filterFriends               : filterFriends,
+			reset                       : reset,
 			setCallbackFriendSelected   : setCallbackFriendSelected,
 			setCallbackFriendUnselected : setCallbackFriendUnselected,
 			setCallbackMaxSelection     : setCallbackMaxSelection,
