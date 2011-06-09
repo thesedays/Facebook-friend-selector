@@ -30,6 +30,7 @@ var TDFriendSelector = (function(module, $) {
 		settings = {
 			speed                    : 500,
 			debug                    : false,
+			textSelect               : 'select',
 			disabledClass            : 'TDFriendSelector_disabled',
 			friendSelectedClass      : 'TDFriendSelector_friendSelected',
 			friendDisabledClass      : 'TDFriendSelector_friendDisabled',
@@ -398,7 +399,7 @@ var TDFriendSelector = (function(module, $) {
 					'<img src="http://graph.facebook.com/' + friend.id + '/picture?type=square" width="50" height="50" alt="' + friend.name + '" class="TDFriendSelector_friendAvatar" />' +
 					'<div class="TDFriendSelector_friendName">' + 
 						'<span>' + friend.name + '</span>' +
-						'<span class="TDFriendSelector_friendSelect">select</span>' +
+						'<span class="TDFriendSelector_friendSelect">' + settings.textSelect + '</span>' +
 					'</div>' +
 				'</a>';
 		};
