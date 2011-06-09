@@ -71,6 +71,9 @@ var TDFriendSelector = (function(module, $) {
 	 */
 	setFriends = function(input) {
 		var i, len;
+		if (!input) {
+			return;
+		}
 		input = Array.prototype.slice.call(input);
 		for (i = 0, len = input.length; i < len; i += 1) {
 			input[i].upperCaseName = input[i].name.toUpperCase();
@@ -137,7 +140,7 @@ var TDFriendSelector = (function(module, $) {
 		showFriendSelector = function() {
 			var i, len;
 			log('TDFriendSelector - newInstance - showFriendSelector');
-			if (!friends) {
+			if (!$friends) {
 				return buildFriendSelector(showFriendSelector);
 			} else {
 				bindEvents();
