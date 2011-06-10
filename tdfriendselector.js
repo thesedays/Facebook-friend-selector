@@ -299,6 +299,11 @@ var TDFriendSelector = (function(module, $) {
 			var friendId, i, len, removedId;
 			friendId = $friend.attr('data-id');
 
+			// If the friend is disabled, ignore this
+			if ($friend.hasClass(settings.friendDisabledClass)) {
+				return;
+			}
+
 			if (!$friend.hasClass(settings.friendSelectedClass)) {
 				// If autoDeselection is enabled and they have already selected the max number of friends, deselect the first friend
 				if (instanceSettings.autoDeselection && selectedFriendIds.length === instanceSettings.maxSelection) {
