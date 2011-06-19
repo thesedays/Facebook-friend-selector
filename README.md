@@ -1,4 +1,4 @@
-Welcome to the These Days Friend Selector
+Welcome to the These Days Facebook Friend Selector
 =========================================
 
 This is an interface component for websites and Facebook applications which allows your users to make a selection of one or more of their friends. The friends are returned as an array of Facebook IDs. It is similar to the `fb:multi-friend-selector` component by Facebook, except it can be used to select friends for anything, not just application requests.
