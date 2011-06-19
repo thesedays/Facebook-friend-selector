@@ -39,17 +39,15 @@ Just edit `example.js` and set your Facebook `appId`.
 
 	TDFriendSelector.init({debug: true});
 
-3 - Create an instance of the plugin. We allow multiple instances per page because sometimes you will need users to select friends for more than one thing. You can pass in options here which will only effect this instance, for example, number of friends per screen and maximum selection number.
+3 - Create an instance of the plugin. We allow multiple instances per page because sometimes you will need users to select friends for more than one thing. You can pass in options here which will only effect this instance, for example a callback to deal with the friends that are selected.
 
-	selector1 = TDFriendSelector.newInstance();
+	selector1 = TDFriendSelector.newInstance({
+		callbackSubmit: function(selectedFriendIds) {
+			console.log("The following friends were selected: " + selectedFriendIds.join(", "));
+		}
+	});
 
-4 - Set a callback to deal with the friends that are selected.
-
-	selector1.setCallbackSubmit(function(selectedFriendIds) {
-		console.log('The following friends were selected: ' + selectedFriendIds.join(", "));
-	};);
-
-5 - Display the plugin instance when you need it. The plugin will automatically load the Facebook friends of the logged in user (and they will be cached and reused across all instances on the page).
+4 - Display the plugin instance when you need it. The plugin will automatically load the Facebook friends of the logged in user (and they will be cached and reused across all instances on the page).
 
 	$("#btnSelect1").click(function (e) {
 		e.preventDefault();

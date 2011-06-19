@@ -1,5 +1,5 @@
+/*jslint devel: true, bitwise: false, undef: false, browser: true, continue: false, debug: false, eqeq: false, es5: false, type: false, evil: false, vars: false, forin: false, white: true, newcap: false, nomen: true, plusplus: false, regexp: true, sloppy: true */
 /*globals jQuery, FB */
-/*jslint white: false, devel: true, onevar: true, browser: true, undef: true, nomen: false, regexp: false, plusplus: true, bitwise: true, newcap: true */
 
 /*!
  * These Days Friend Selector
@@ -19,6 +19,7 @@ var TDFriendSelector = (function(module, $) {
 
 	/////////////////////////////////////////
 	// PUBLIC FUNCTIONS FOR GLOBAL PLUGIN
+	// They are public because they are added to module and returned
 	/////////////////////////////////////////
 
 	/**
@@ -107,11 +108,9 @@ var TDFriendSelector = (function(module, $) {
 	newInstance = function(options) {
 		// Public functions
 		var showFriendSelector, hideFriendSelector, getselectedFriendIds, setDisabledFriendIds, filterFriends, reset,
-		setCallbackFriendSelected, setCallbackFriendUnselected, setCallbackMaxSelection, setCallbackSubmit,
 
 		// Private variables
 		instanceSettings, selectedFriendIds = [], disabledFriendIds = [], numFilteredFriends = 0,
-		callbackFriendSelected, callbackFriendUnselected, callbackMaxSelection, callbackSubmit,
 
 		// Private functions
 		bindEvents, unbindEvents, updatePaginationButtons, selectFriend;
@@ -123,10 +122,14 @@ var TDFriendSelector = (function(module, $) {
 
 		// Default settings
 		instanceSettings = {
-			maxSelection      : 4,
-			friendsPerPage    : 10,
-			friendHeight      : 64,
-			autoDeselection   : false // Allow the user to keep on selecting once they reach maxSelection, and just deselect the first selected friends
+			maxSelection             : 4,
+			friendsPerPage           : 10,
+			friendHeight             : 64,
+			autoDeselection          : false, // Allow the user to keep on selecting once they reach maxSelection, and just deselect the first selected friend
+			callbackFriendSelected   : null,
+			callbackFriendUnselected : null,
+			callbackMaxSelection     : null,
+			callbackSubmit           : null
 		};
 
 		// Override defaults with arguments
@@ -221,11 +224,6 @@ var TDFriendSelector = (function(module, $) {
 			updatePaginationButtons(1);
 		};
 
-		setCallbackFriendSelected = function(callback) { callbackFriendSelected = callback; };
-		setCallbackFriendUnselected = function(callback) { callbackFriendUnselected = callback; };
-		setCallbackMaxSelection = function(callback) { callbackMaxSelection = callback; };
-		setCallbackSubmit = function(callback) { callbackSubmit = callback; };
-
 		/////////////////////////////////////////
 		// PRIVATE FUNCTIONS FOR AN INSTANCE
 		/////////////////////////////////////////
@@ -240,7 +238,7 @@ var TDFriendSelector = (function(module, $) {
 			$buttonOK.bind('click', function(e) {
 				e.preventDefault();
 				hideFriendSelector();
-				if (typeof callbackSubmit === "function") { callbackSubmit(selectedFriendIds); }
+				if (typeof instanceSettings.callbackSubmit === "function") { instanceSettings.callbackSubmit(selectedFriendIds); }
 			});
 
 			$friends.bind('click', function(e) {
@@ -256,7 +254,7 @@ var TDFriendSelector = (function(module, $) {
 				var pageNumber = parseInt($pageNumber.text(), 10) - 1;
 				e.preventDefault();
 				if (pageNumber < 1) { return; }
-				$friendsContainer.css({top: 0 - ((pageNumber - 1) * instanceSettings.friendsPerPage * instanceSettings.friendHeight)});
+				$friendsContainer.css({top: - ((pageNumber - 1) * instanceSettings.friendsPerPage * instanceSettings.friendHeight)});
 				updatePaginationButtons(pageNumber);
 			});
 
@@ -264,7 +262,7 @@ var TDFriendSelector = (function(module, $) {
 				var pageNumber = parseInt($pageNumber.text(), 10) + 1, numPages = Math.ceil(friends.length / instanceSettings.friendsPerPage);
 				e.preventDefault();
 				if ($(this).hasClass(settings.disabledClass)) { return; }
-				$friendsContainer.css({top: 0 - ((pageNumber - 1) * instanceSettings.friendsPerPage * instanceSettings.friendHeight)});
+				$friendsContainer.css({top: - ((pageNumber - 1) * instanceSettings.friendsPerPage * instanceSettings.friendHeight)});
 				updatePaginationButtons(pageNumber);
 			});
 		};
@@ -318,7 +316,7 @@ var TDFriendSelector = (function(module, $) {
 						$friend.addClass(settings.friendSelectedClass);
 						$selectedCount.html(selectedFriendIds.length);
 						log('TDFriendSelector - newInstance - selectFriend - selected IDs: ', selectedFriendIds);
-						if (typeof callbackFriendSelected === "function") { callbackFriendSelected(friendId); }
+						if (typeof instanceSettings.callbackFriendSelected === "function") { instanceSettings.callbackFriendSelected(friendId); }
 					} else {
 						log('TDFriendSelector - newInstance - selectFriend - ID already stored');
 					}
@@ -331,14 +329,14 @@ var TDFriendSelector = (function(module, $) {
 						selectedFriendIds.splice(i, 1);
 						$friend.removeClass(settings.friendSelectedClass);
 						$selectedCount.html(selectedFriendIds.length);
-						if (typeof callbackFriendUnselected === "function") { callbackFriendUnselected(friendId); }
+						if (typeof instanceSettings.callbackFriendUnselected === "function") { instanceSettings.callbackFriendUnselected(friendId); }
 						return false;
 					}
 				}
 			}
 
 			if (selectedFriendIds.length === instanceSettings.maxSelection) {
-				if (typeof callbackMaxSelection === "function") { callbackMaxSelection(); }
+				if (typeof instanceSettings.callbackMaxSelection === "function") { instanceSettings.callbackMaxSelection(); }
 			}
 		};
 
@@ -349,11 +347,7 @@ var TDFriendSelector = (function(module, $) {
 			getselectedFriendIds        : getselectedFriendIds,
 			setDisabledFriendIds        : setDisabledFriendIds,
 			filterFriends               : filterFriends,
-			reset                       : reset,
-			setCallbackFriendSelected   : setCallbackFriendSelected,
-			setCallbackFriendUnselected : setCallbackFriendUnselected,
-			setCallbackMaxSelection     : setCallbackMaxSelection,
-			setCallbackSubmit           : setCallbackSubmit
+			reset                       : reset
 		};
 	};
 

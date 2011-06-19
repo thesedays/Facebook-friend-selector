@@ -1,5 +1,5 @@
+/*jslint devel: true, bitwise: false, undef: false, browser: true, continue: false, debug: false, eqeq: false, es5: false, type: false, evil: false, vars: false, forin: false, white: true, newcap: false, nomen: true, plusplus: false, regexp: true, sloppy: true */
 /*globals $, jQuery, FB, TDFriendSelector */
-/*jslint white: false, devel: true, onevar: true, browser: true, undef: true, nomen: false, regexp: false, plusplus: true, bitwise: true, newcap: true */
 
 window.fbAsyncInit = function () {
 
@@ -8,52 +8,69 @@ window.fbAsyncInit = function () {
 	$(document).ready(function () {
 		var selector1, selector2, logActivity, callbackFriendSelected, callbackFriendUnselected, callbackMaxSelection, callbackSubmit;
 
-		TDFriendSelector.init({debug: true});
-
-		selector1 = TDFriendSelector.newInstance();
-		selector2 = TDFriendSelector.newInstance({maxSelection: 2, friendsPerPage: 5});
-
-		logActivity = function (message) {
-			$("#results").append('<div>' + new Date() + ' - ' + message + '</div>');
-		};
-
+		// When a friend is selected, log their name and ID
 		callbackFriendSelected = function(friendId) {
 			var friend, name;
 			friend = TDFriendSelector.getFriendById(friendId);
 			name = friend.name;
 			logActivity('Selected ' + name + ' (ID: ' + friendId + ')');
 		};
-		selector1.setCallbackFriendSelected(callbackFriendSelected);
-		selector2.setCallbackFriendSelected(callbackFriendSelected);
 
+		// When a friend is deselected, log their name and ID
 		callbackFriendUnselected = function(friendId) {
 			var friend, name;
 			friend = TDFriendSelector.getFriendById(friendId);
 			name = friend.name;
 			logActivity('Unselected ' + name + ' (ID: ' + friendId + ')');
 		};
-		selector1.setCallbackFriendUnselected(callbackFriendUnselected);
-		selector2.setCallbackFriendUnselected(callbackFriendUnselected);
 
+		// When the maximum selection is reached, log a message
 		callbackMaxSelection = function() {
 			logActivity('Selected the maximum number of friends');
 		};
-		selector1.setCallbackMaxSelection(callbackMaxSelection);
-		selector2.setCallbackMaxSelection(callbackMaxSelection);
 
+		// When the user clicks OK, log a message
 		callbackSubmit = function(selectedFriendIds) {
 			logActivity('Clicked OK with the following friends selected: ' + selectedFriendIds.join(", "));
 		};
-		selector1.setCallbackSubmit(callbackSubmit);
-		selector2.setCallbackSubmit(callbackSubmit);
+
+		// Initialise the Friend Selector with options that will apply to all instances
+		TDFriendSelector.init({debug: true});
+
+		// Create some Friend Selector instances
+		selector1 = TDFriendSelector.newInstance({
+			callbackFriendSelected   : callbackFriendSelected,
+			callbackFriendUnselected : callbackFriendUnselected,
+			callbackMaxSelection     : callbackMaxSelection,
+			callbackSubmit           : callbackSubmit
+		});
+		selector2 = TDFriendSelector.newInstance({
+			callbackFriendSelected   : callbackFriendSelected,
+			callbackFriendUnselected : callbackFriendUnselected,
+			callbackMaxSelection     : callbackMaxSelection,
+			callbackSubmit           : callbackSubmit,
+			maxSelection             : 1,
+			friendsPerPage           : 5,
+			autoDeselection          : true
+		});
+
+		FB.getLoginStatus(function(response) {
+			if (response.session) {
+				$("#login-status").html("Logged in");
+			} else {
+				$("#login-status").html("Not logged in");
+			}
+		});
 
 		$("#btnLogin").click(function (e) {
 			e.preventDefault();
 			FB.login(function (response) {
 				if (response.session) {
 					console.log("Logged in");
+					$("#login-status").html("Logged in");
 				} else {
 					console.log("Not logged in");
+					$("#login-status").html("Not logged in");
 				}
 			}, {});
 		});
@@ -61,6 +78,7 @@ window.fbAsyncInit = function () {
 		$("#btnLogout").click(function (e) {
 			e.preventDefault();
 			FB.logout();
+			$("#login-status").html("Not logged in");
 		});
 
 		$("#btnSelect1").click(function (e) {
@@ -73,8 +91,12 @@ window.fbAsyncInit = function () {
 			selector2.showFriendSelector();
 		});
 
+		logActivity = function (message) {
+			$("#results").append('<div>' + new Date() + ' - ' + message + '</div>');
+		};
 	});
 };
+
 (function () {
 	var e = document.createElement('script');
 	e.async = true;
