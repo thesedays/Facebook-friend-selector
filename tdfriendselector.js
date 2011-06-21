@@ -12,7 +12,7 @@ var TDFriendSelector = (function(module, $) {
 
 	// Private variables
 	settings, friends,
-	$friends, $container, $friendsMask, $friendsContainer, $searchField, $selectedCount, $selectedCountMax, $pageNumber, $pageNumberTotal, $pagePrev, $pageNext, $buttonClose, $buttonOK,
+	$friends, $container, $friendsContainer, $searchField, $selectedCount, $selectedCountMax, $pageNumber, $pageNumberTotal, $pagePrev, $pageNext, $buttonClose, $buttonOK,
 
 	// Private functions
 	$getFriendById, buildFriendSelector, sortFriends, log;
@@ -37,7 +37,6 @@ var TDFriendSelector = (function(module, $) {
 			friendDisabledClass      : 'TDFriendSelector_friendDisabled',
 			friendFilteredClass      : 'TDFriendSelector_friendFiltered',
 			containerSelector        : '#TDFriendSelector',
-			friendsMaskSelector      : '.TDFriendSelector_friendsMask',
 			friendsContainerSelector : '.TDFriendSelector_friendsContainer',
 			searchFieldSelector      : '#TDFriendSelector_searchField',
 			selectedCountSelector    : '.TDFriendSelector_selectedCount',
@@ -55,7 +54,6 @@ var TDFriendSelector = (function(module, $) {
 
 		// Select DOM elements
 		$container        = $(settings.containerSelector);
-		$friendsMask      = $container.find(settings.friendsMaskSelector);
 		$friendsContainer = $container.find(settings.friendsContainerSelector);
 		$searchField      = $container.find(settings.searchFieldSelector);
 		$selectedCount    = $container.find(settings.selectedCountSelector);
@@ -93,8 +91,9 @@ var TDFriendSelector = (function(module, $) {
 	 */
 	getFriendById = function(id) {
 		var i, len;
+		id = id.toString();
 		for (i = 0, len = friends.length; i < len; i += 1) {
-			if ('' + friends[i].id === '' + id) {
+			if (friends[i].id === id) {
 				return friends[i];
 			}
 		}
@@ -113,7 +112,7 @@ var TDFriendSelector = (function(module, $) {
 		instanceSettings, selectedFriendIds = [], disabledFriendIds = [], numFilteredFriends = 0,
 
 		// Private functions
-		bindEvents, unbindEvents, updatePaginationButtons, selectFriend;
+		bindEvents, unbindEvents, updateFriendsContainer, updatePaginationButtons, selectFriend;
 
 		if (!settings) {
 			log('Cannot create a new instance of TDFriendSelector because the plugin not initialised.');
@@ -124,7 +123,6 @@ var TDFriendSelector = (function(module, $) {
 		instanceSettings = {
 			maxSelection             : 4,
 			friendsPerPage           : 10,
-			friendHeight             : 64,
 			autoDeselection          : false, // Allow the user to keep on selecting once they reach maxSelection, and just deselect the first selected friend
 			callbackFriendSelected   : null,
 			callbackFriendUnselected : null,
@@ -163,10 +161,9 @@ var TDFriendSelector = (function(module, $) {
 				numFilteredFriends = 0;
 				$searchField.val("");
 				// Update paging
-				$friendsMask.height(instanceSettings.friendsPerPage * instanceSettings.friendHeight);
-				$friendsContainer.css({top: 0});
 				$selectedCount.html(selectedFriendIds.length);
 				$selectedCountMax.html(instanceSettings.maxSelection);
+				updateFriendsContainer(1);
 				updatePaginationButtons(1);
 				$container.fadeIn(500);
 			}
@@ -195,7 +192,6 @@ var TDFriendSelector = (function(module, $) {
 			var i, len;
 			numFilteredFriends = 0;
 			$friends.removeClass(settings.friendFilteredClass);
-			$friendsContainer.css({top: 0});
 			if (filter.length > 2) {
 				filter = filter.toUpperCase();
 				for (i = 0, len = friends.length; i < len; i += 1) {
@@ -205,6 +201,7 @@ var TDFriendSelector = (function(module, $) {
 					}
 				}
 			}
+			updateFriendsContainer(1);
 			updatePaginationButtons(1);
 		};
 
@@ -215,12 +212,12 @@ var TDFriendSelector = (function(module, $) {
 			if (!friends || friends.length === 0) {
 				return;
 			}
+			$friendsContainer.empty();
 			selectedFriendIds = [];
 			$selectedCount.html("");
 			disabledFriendIds = [];
 			numFilteredFriends = 0;
 			$searchField.val("");
-			$friendsContainer.css({top: 0});
 			updatePaginationButtons(1);
 		};
 
@@ -241,11 +238,6 @@ var TDFriendSelector = (function(module, $) {
 				if (typeof instanceSettings.callbackSubmit === "function") { instanceSettings.callbackSubmit(selectedFriendIds); }
 			});
 
-			$friends.bind('click', function(e) {
-				e.preventDefault();
-				selectFriend($(this));
-			});
-
 			$searchField.bind('keyup', function(e) {
 				filterFriends($(this).val());
 			});
@@ -254,15 +246,15 @@ var TDFriendSelector = (function(module, $) {
 				var pageNumber = parseInt($pageNumber.text(), 10) - 1;
 				e.preventDefault();
 				if (pageNumber < 1) { return; }
-				$friendsContainer.css({top: - ((pageNumber - 1) * instanceSettings.friendsPerPage * instanceSettings.friendHeight)});
+				updateFriendsContainer(pageNumber);
 				updatePaginationButtons(pageNumber);
 			});
 
 			$pageNext.bind('click', function(e) {
-				var pageNumber = parseInt($pageNumber.text(), 10) + 1, numPages = Math.ceil(friends.length / instanceSettings.friendsPerPage);
+				var pageNumber = parseInt($pageNumber.text(), 10) + 1;
 				e.preventDefault();
 				if ($(this).hasClass(settings.disabledClass)) { return; }
-				$friendsContainer.css({top: - ((pageNumber - 1) * instanceSettings.friendsPerPage * instanceSettings.friendHeight)});
+				updateFriendsContainer(pageNumber);
 				updatePaginationButtons(pageNumber);
 			});
 		};
@@ -271,10 +263,22 @@ var TDFriendSelector = (function(module, $) {
 		unbindEvents = function() {
 			$buttonClose.unbind('click');
 			$buttonOK.unbind('click');
-			$friends.unbind('click');
+			$friendsContainer.children().unbind('click');
 			$searchField.unbind('keyup');
 			$pagePrev.unbind('click');
 			$pageNext.unbind('click');
+		};
+
+		// Set the contents of the friends container
+		updateFriendsContainer = function(pageNumber) {
+			var firstIndex, lastIndex;
+			firstIndex = (pageNumber - 1) * instanceSettings.friendsPerPage;
+			lastIndex = pageNumber * instanceSettings.friendsPerPage;
+			$friendsContainer.html($friends.not("." + settings.friendFilteredClass).slice(firstIndex, lastIndex));
+			$friendsContainer.children().bind('click', function(e) {
+				e.preventDefault();
+				selectFriend($(this));
+			});
 		};
 
 		updatePaginationButtons = function(pageNumber) {
@@ -342,12 +346,12 @@ var TDFriendSelector = (function(module, $) {
 
 		// Return an object with access to the public members
 		return {
-			showFriendSelector          : showFriendSelector,
-			hideFriendSelector          : hideFriendSelector,
-			getselectedFriendIds        : getselectedFriendIds,
-			setDisabledFriendIds        : setDisabledFriendIds,
-			filterFriends               : filterFriends,
-			reset                       : reset
+			showFriendSelector   : showFriendSelector,
+			hideFriendSelector   : hideFriendSelector,
+			getselectedFriendIds : getselectedFriendIds,
+			setDisabledFriendIds : setDisabledFriendIds,
+			filterFriends        : filterFriends,
+			reset                : reset
 		};
 	};
 
@@ -357,8 +361,9 @@ var TDFriendSelector = (function(module, $) {
 
 	$getFriendById = function(id) {
 		var i, len;
+		id = id.toString();
 		for (i = 0, len = friends.length; i < len; i += 1) {
-			if ('' + friends[i].id === '' + id) {
+			if (friends[i].id === id) {
 				return $($friends[i]);
 			}
 		}
@@ -370,6 +375,7 @@ var TDFriendSelector = (function(module, $) {
 	 */
 	buildFriendSelector = function(callback) {
 		var buildMarkup, buildFriendMarkup;
+		log("buildFriendSelector");
 
 		if (!FB) {
 			log('The Facebook SDK must be initialised before showing the friend selector');
@@ -400,14 +406,11 @@ var TDFriendSelector = (function(module, $) {
 
 		// Build the markup of the friend selector
 		buildMarkup = function() {
-			var i, len, html, j, friendID;
-			html = document.createDocumentFragment();
-			html.innerHTML = '';
+			var i, len, html = '';
 			for (i = 0, len = friends.length; i < len; i += 1) {
-				html.innerHTML += buildFriendMarkup(friends[i]);
+				html += buildFriendMarkup(friends[i]);
 			}
-			$friendsContainer.html(html.innerHTML);
-			$friends = $friendsContainer.find('a');
+			$friends = $(html);
 		};
 
 		// Return the markup for a single friend

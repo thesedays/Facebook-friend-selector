@@ -38,9 +38,8 @@
 			#TDFriendSelector_searchField { float: right; }
 		}
 
-		.TDFriendSelector_friendsMask { width: $friendWidth; margin: 10px 0 0; position: relative; overflow: hidden; }
 		.TDFriendSelector_friendsContainer {
-			width: $friendWidth; position: absolute; top: 0; left: 0;
+			width: $friendWidth; margin: 10px 0 0;
 			.TDFriendSelector_friend {
 				display: block; padding: 5px 10px; margin-bottom: 2px; border-bottom: 1px solid #cacaca; cursor: pointer;
 				.TDFriendSelector_friendAvatar { float: left; height: 50px; width: 50px; }
