@@ -124,6 +124,7 @@ var TDFriendSelector = (function(module, $) {
 			maxSelection             : 4,
 			friendsPerPage           : 10,
 			autoDeselection          : false, // Allow the user to keep on selecting once they reach maxSelection, and just deselect the first selected friend
+			filterCharacters         : 1, // Set to 3 if you would like the filter to only run after the user has typed 3 or more chars
 			callbackFriendSelected   : null,
 			callbackFriendUnselected : null,
 			callbackMaxSelection     : null,
@@ -192,7 +193,7 @@ var TDFriendSelector = (function(module, $) {
 			var i, len;
 			numFilteredFriends = 0;
 			$friends.removeClass(settings.friendFilteredClass);
-			if (filter.length > 2) {
+			if (filter.length >= instanceSettings.filterCharacters) {
 				filter = filter.toUpperCase();
 				for (i = 0, len = friends.length; i < len; i += 1) {
 					if (friends[i].upperCaseName.indexOf(filter) === -1) {
