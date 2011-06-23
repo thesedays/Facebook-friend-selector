@@ -243,6 +243,14 @@ var TDFriendSelector = (function(module, $) {
 				filterFriends($(this).val());
 			});
 
+			// The enter key shouldnt do anything in the search field
+			$searchField.bind('keydown', function(e) {
+				if (e.which === 13) {
+					e.preventDefault();
+					e.stopPropagation();
+				}
+			});
+
 			$pagePrev.bind('click', function(e) {
 				var pageNumber = parseInt($pageNumber.text(), 10) - 1;
 				e.preventDefault();
@@ -258,6 +266,23 @@ var TDFriendSelector = (function(module, $) {
 				updateFriendsContainer(pageNumber);
 				updatePaginationButtons(pageNumber);
 			});
+
+			log("binding events");
+			$(window).bind('keydown', function(e) {
+				log(e.which);
+				if (e.which === 13) {
+					// The enter key has the same effect as the OK button
+					e.preventDefault();
+					e.stopPropagation();
+					hideFriendSelector();
+					if (typeof instanceSettings.callbackSubmit === "function") { instanceSettings.callbackSubmit(selectedFriendIds); }
+				} else if (e.which === 27) {
+					// The escape key has the same effect as the close button
+					e.preventDefault();
+					e.stopPropagation();
+					hideFriendSelector();
+				}
+			});
 		};
 
 		// Remove event listeners
@@ -266,8 +291,10 @@ var TDFriendSelector = (function(module, $) {
 			$buttonOK.unbind('click');
 			$friendsContainer.children().unbind('click');
 			$searchField.unbind('keyup');
+			$searchField.unbind('keydown');
 			$pagePrev.unbind('click');
 			$pageNext.unbind('click');
+			$(window).unbind('keydown');
 		};
 
 		// Set the contents of the friends container
