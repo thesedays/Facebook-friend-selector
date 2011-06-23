@@ -267,9 +267,7 @@ var TDFriendSelector = (function(module, $) {
 				updatePaginationButtons(pageNumber);
 			});
 
-			log("binding events");
 			$(window).bind('keydown', function(e) {
-				log(e.which);
 				if (e.which === 13) {
 					// The enter key has the same effect as the OK button
 					e.preventDefault();
