@@ -442,7 +442,7 @@ var TDFriendSelector = (function(module, $) {
 		// Return the markup for a single friend
 		buildFriendMarkup = function(friend) {
 			return '<a href="#" class="TDFriendSelector_friend TDFriendSelector_clearfix" data-id="' + friend.id + '">' +
-					'<img src="http://graph.facebook.com/' + friend.id + '/picture?type=square" width="50" height="50" alt="' + friend.name + '" class="TDFriendSelector_friendAvatar" />' +
+					'<img src="//graph.facebook.com/' + friend.id + '/picture?type=square" width="50" height="50" alt="' + friend.name + '" class="TDFriendSelector_friendAvatar" />' +
 					'<div class="TDFriendSelector_friendName">' + 
 						'<span>' + friend.name + '</span>' +
 						'<span class="TDFriendSelector_friendSelect">' + settings.textSelect + '</span>' +
