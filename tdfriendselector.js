@@ -410,7 +410,7 @@ var TDFriendSelector = (function(module, $) {
 
 		// Check that the user is logged in to Facebook
 		FB.getLoginStatus(function(response) {
-			if (response.session) {
+			if (response.status === 'connected') {
 				// Load Facebook friends
 				FB.api('/me/friends?fields=id,name', function(response) {
 					if (response.data) {
