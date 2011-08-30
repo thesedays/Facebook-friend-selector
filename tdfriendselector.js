@@ -141,11 +141,13 @@ var TDFriendSelector = (function(module, $) {
 		/**
 		 * Call this function to show the interface
 		 */
-		showFriendSelector = function() {
+		showFriendSelector = function(callback) {
 			var i, len;
 			log('TDFriendSelector - newInstance - showFriendSelector');
 			if (!$friends) {
-				return buildFriendSelector(showFriendSelector);
+				return buildFriendSelector(function() {
+					showFriendSelector(callback);
+				});
 			} else {
 				bindEvents();
 				// Update classnames to represent the selections for this instance
@@ -167,6 +169,9 @@ var TDFriendSelector = (function(module, $) {
 				updateFriendsContainer(1);
 				updatePaginationButtons(1);
 				$container.fadeIn(500);
+				if (typeof callback === 'function') {
+					callback();
+				}
 			}
 		};
 

@@ -1,8 +1,8 @@
-/*global FB, TDFriendSelector, module, test, expect, equals, ok, start, stop */
+/*global FB, TDFriendSelector, test, asyncTest, expect, module, QUnit, ok, equal, notEqual, deepEqual, notDeepEqual, strictEqual, notStrictEqual, raises, start, stop */
 // Documentation on writing tests here: http://docs.jquery.com/QUnit
 // Example tests: https://github.com/jquery/qunit/blob/master/test/same.js
 
-var $action = $('#action'), selector1;
+var $action = $('#action'), selector1, friends;
 
 module('Environment module');
 
@@ -28,39 +28,86 @@ test('cancel login using cancel button', function() {
 	expect(1);
 	stop();
 	$action.click(function() {
+		$action.empty().unbind();
 		FB.login(function(response) {
 			ok(!response.authResponse, 'should not get a authResponse');
-			$action.empty().unbind();
 			start();
 		});
 	});
 	$action.html('Click the "Dont Allow" Button on the Login Popup');
 });*/
 
-test('login with the "Connect" button', function() {
+test('Login to Facebook', function() {
 	expect(2);
 	stop();
-	$action.click(function() {
-		FB.login(function(response) {
+	FB.getLoginStatus(function(response) {
+		if (response.authResponse) {
 			ok(response.authResponse, 'should get a authResponse');
-			equals(response.status, 'connected', 'should be connected');
-			$action.empty().unbind();
+			equal(response.status, 'connected', 'should be connected');
 			start();
-		});
+		} else {
+			$action.click(function() {
+				$action.empty().unbind();
+				FB.login(function(response) {
+					ok(response.authResponse, 'should get a authResponse');
+					equal(response.status, 'connected', 'should be connected');
+					start();
+				});
+			});
+			$action.html('Login with the "Connect" button');
+		}
 	});
-	$action.html('Login with the "Connect" button');
+});
+
+test('Load friends from Facebook', function() {
+	expect(1);
+	stop();
+	FB.api('/me/friends/', function(response) {
+		var loaded = (response && response.data && response.data.length > 0);
+		if (loaded) {
+			friends = response.data;
+		}
+		ok(loaded, 'should load friends');
+		start();
+	});
 });
 
 module('Friend Selector module');
 
 test('TDFriendSelector should not create new instances if it is not initialised', function() {
 	selector1 = TDFriendSelector.newInstance();
-	equals(selector1, false, 'should return false');
+	equal(selector1, false, 'should return false');
 });
 
 test('Can TDFriendSelector create a new instance', function() {
-	TDFriendSelector.init();
+	TDFriendSelector.init({debug: true});
 	selector1 = TDFriendSelector.newInstance();
 	ok(selector1, 'should return an object');
 });
 
+test('show friend selector', function() {
+	expect(3);
+	stop();
+	selector1.showFriendSelector(function() {
+		ok(true, 'selector should be built and shown');
+		ok($('.TDFriendSelector_friend').length > 0, 'expected some elements to be added to the page with the classname TDFriendSelector_friend');
+		equal(selector1.getselectedFriendIds(), 0, 'selected friends should be empty');
+		start();
+	});
+});
+
+test('test filtering', function() {
+	expect(1);
+	stop();
+	selector1.filterFriends(friends[0].name);
+	setTimeout(function() {
+		ok($('.TDFriendSelector_friend').length > 0, 'expected at least one element to still be shown with the classname TDFriendSelector_friend');
+		start();
+	}, 500);
+});
+/*
+test('test selection', function() {
+	expect(1);
+	stop();
+});
+*/
