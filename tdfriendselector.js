@@ -458,7 +458,7 @@ var TDFriendSelector = (function(module, $) {
 	};
 
 	log = function() {
-		if (settings.debug && window.console) {
+		if (settings && settings.debug && window.console) {
 			console.log(Array.prototype.slice.call(arguments));
 		}
 	};

@@ -3,7 +3,7 @@
 
 window.fbAsyncInit = function () {
 
-	FB.init({appId: '172102396182433', status: true, cookie: false, xfbml: false});
+	FB.init({appId: '172102396182433', status: true, cookie: false, xfbml: false, oauth: true});
 
 	$(document).ready(function () {
 		var selector1, selector2, logActivity, callbackFriendSelected, callbackFriendUnselected, callbackMaxSelection, callbackSubmit;

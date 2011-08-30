@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>QUnit Tests</title>
+	<link rel="stylesheet" href="qunit/qunit.css" media="screen">
+</head>
+
+<body class="flora">
+
+	<div id="fb-root"></div>
+	<button id="action"></button>
+
+	<h1 id="qunit-header">QUnit Test Suite for These Days Friend Selector</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup</div>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+	<script src="//connect.facebook.net/en_US/all.js"></script>
+	<script>
+		FB.init({appId: '197719376961577', status: true, cookie: false, xfbml: false, oauth: true});
+	</script>
+	<script src="../tdfriendselector.js"></script>
+
+	<!-- test runner files -->
+	<script src="qunit/qunit.js"></script>
+	<script src="tests.js"></script>
+</body>
+
+</html>
