@@ -55,7 +55,7 @@ window.fbAsyncInit = function () {
 		});
 
 		FB.getLoginStatus(function(response) {
-			if (response.session) {
+			if (response.authResponse) {
 				$("#login-status").html("Logged in");
 			} else {
 				$("#login-status").html("Not logged in");
@@ -65,7 +65,7 @@ window.fbAsyncInit = function () {
 		$("#btnLogin").click(function (e) {
 			e.preventDefault();
 			FB.login(function (response) {
-				if (response.session) {
+				if (response.authResponse) {
 					console.log("Logged in");
 					$("#login-status").html("Logged in");
 				} else {
