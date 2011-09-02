@@ -106,18 +106,32 @@ test('test filtering', function() {
 	}, 500);
 });
 
-test('test selection', function() {
-	var selector2, callbackFriendSelected, callbackFriendUnselected, callbackSubmit;
-	expect(4);
+test('test selection and deselection', function() {
+	var phase = 1, friendId, selector2, callbackFriendSelected, callbackFriendUnselected, callbackSubmit;
+	expect(7);
 	stop();
 	callbackFriendSelected = function(id) {
-		ok(id, 'expected friend id to be truthy');
-		ok((typeof id === 'string'), 'expected friend id to be a string');
+		friendId = id;
+		ok((id && typeof id === 'string'), 'expected friend id to be a string');
+	};
+	callbackFriendUnselected = function(id) {
+		ok((id && typeof id === 'string'), 'expected friend id to be a string');
+		strictEqual(friendId, id, 'expected id to be the same as the id returned by callbackFriendSelected');
 	};
 	callbackSubmit = function(ids) {
-		ok((typeof ids === 'object' && ids.length && ids.length === 1), 'expected friend ids to be an array of length 1');
-		ok((typeof ids[0] === 'string'), 'expected ids[0] to be a string');
-		start();
+		if (phase === 1) {
+			ok((typeof ids === 'object' && ids.length && ids.length === 1), 'expected friend ids to be an array of length 1');
+			ok((typeof ids[0] === 'string'), 'expected ids[0] to be a string');
+			strictEqual(friendId, ids[0], 'expected ids[0] to be the same as the id returned by callbackFriendSelected');
+			phase = 2;
+			selector2.showFriendSelector(function() {
+				$('.TDFriendSelector_friend').eq(0).click();
+				$('#TDFriendSelector_buttonOK').click();
+			});
+		} else {
+			ok((typeof ids === 'object' && ids.length === 0), 'expected friend ids to be an array of length 0');
+			start();
+		}
 	};
 	selector2 = TDFriendSelector.newInstance({
 		callbackFriendSelected:   callbackFriendSelected,
