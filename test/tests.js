@@ -105,9 +105,28 @@ test('test filtering', function() {
 		start();
 	}, 500);
 });
-/*
+
 test('test selection', function() {
-	expect(1);
+	var selector2, callbackFriendSelected, callbackFriendUnselected, callbackSubmit;
+	expect(4);
 	stop();
+	callbackFriendSelected = function(id) {
+		ok(id, 'expected friend id to be truthy');
+		ok((typeof id === 'string'), 'expected friend id to be a string');
+	};
+	callbackSubmit = function(ids) {
+		ok((typeof ids === 'object' && ids.length && ids.length === 1), 'expected friend ids to be an array of length 1');
+		ok((typeof ids[0] === 'string'), 'expected ids[0] to be a string');
+		start();
+	};
+	selector2 = TDFriendSelector.newInstance({
+		callbackFriendSelected:   callbackFriendSelected,
+		callbackFriendUnselected: callbackFriendUnselected,
+		callbackSubmit:           callbackSubmit
+	});
+	selector2.showFriendSelector(function() {
+		$('.TDFriendSelector_friend').eq(0).click();
+		$('#TDFriendSelector_buttonOK').click();
+	});
 });
-*/
+
