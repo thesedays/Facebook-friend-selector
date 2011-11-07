@@ -21,6 +21,7 @@ Just edit `example.js` and set your Facebook `appId`.
 ### Include required CSS
 
 - Include the `tdfriendselector.css` stylesheet in your document.
+- Ensure `tdfriendselector.png` is located in the same directory as `tdfriendselector.css`
 - We wrote the stylesheet with Sass and have included the SCSS source.
 
 ### Include required JavaScript
