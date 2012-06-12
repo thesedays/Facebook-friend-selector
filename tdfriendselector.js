@@ -145,10 +145,14 @@ var TDFriendSelector = (function(module, $) {
 			var i, len;
 			log('TDFriendSelector - newInstance - showFriendSelector');
 			if (!$friends) {
-				return buildFriendSelector(function() {
+				return buildFriendSelector(function(noffriends) {
+					if(!instanceSettings.maxSelection)
+						instanceSettings.maxSelection = noffriends;
 					showFriendSelector(callback);
 				});
 			} else {
+				if(!instanceSettings.maxSelection)
+					instanceSettings.maxSelection = getFriends().length;
 				bindEvents();
 				// Update classnames to represent the selections for this instance
 				$friends.removeClass(settings.friendSelectedClass + ' ' + settings.friendDisabledClass + ' ' + settings.friendFilteredClass);
@@ -405,7 +409,7 @@ var TDFriendSelector = (function(module, $) {
 	 * Load the Facebook friends and build the markup
 	 */
 	buildFriendSelector = function(callback) {
-		var buildMarkup, buildFriendMarkup;
+		var buildMarkup, buildFriendMarkup, aggregateFriends;
 		log("buildFriendSelector");
 
 		if (!FB) {
@@ -417,23 +421,45 @@ var TDFriendSelector = (function(module, $) {
 		FB.getLoginStatus(function(response) {
 			if (response.status === 'connected') {
 				// Load Facebook friends
-				FB.api('/me/friends?fields=id,name', function(response) {
-					if (response.data) {
-						setFriends(response.data);
+	            FB.api({
+	                method: 'fql.multiquery',
+	                queries: {
+	                    'friends':'SELECT uid2 FROM friend WHERE uid1 = me()',
+	                    'profiles':'SELECT id, name FROM profile WHERE id IN (SELECT uid2 FROM #friends)'
+	                }
+	            }, function(response) {
+	                if(!response || response.error_msg) {
+	                    if(response) 
+	                    	log('TDFriendSelector - buildFriendSelector - ' + response.error_msg);
+	                    else 
+	                        log('TDFriendSelector - buildFriendSelector - No friends returned');
+	                }
+	                else {
+	                    aggregateFriends(response);
+	                    setFriends(response.data);
 						// Build the markup
 						buildMarkup();
 						// Call the callback
-						if (typeof callback === 'function') { callback(); }
-					} else {
-						log('TDFriendSelector - buildFriendSelector - No friends returned');
-						return false;
-					}
-				});
+						if (typeof callback === 'function') { callback(response.data.length); }
+	                }
+	            });
 			} else {
 				log('TDFriendSelector - buildFriendSelector - User is not logged in to Facebook');
 				return false;
 			}
 		});
+
+        aggregateFriends = function(response) {
+            var profiles = _.find(response, function(obj){ return obj.name === 'profiles'; });
+
+            response.data = [];
+
+            if(profiles) {
+                $.each(profiles.fql_result_set, function(key, user) {
+                    response.data.push(user);
+                });
+            }
+        };
 
 		// Build the markup of the friend selector
 		buildMarkup = function() {
