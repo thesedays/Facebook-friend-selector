@@ -121,7 +121,7 @@ var TDFriendSelector = (function(module, $) {
 
 		// Default settings
 		instanceSettings = {
-			maxSelection             : 4,
+			maxSelection             : false, // Give a number to restrict the number of possible friend selections
 			friendsPerPage           : 10,
 			autoDeselection          : false, // Allow the user to keep on selecting once they reach maxSelection, and just deselect the first selected friend
 			filterCharacters         : 1, // Set to 3 if you would like the filter to only run after the user has typed 3 or more chars
@@ -409,7 +409,7 @@ var TDFriendSelector = (function(module, $) {
 	 * Load the Facebook friends and build the markup
 	 */
 	buildFriendSelector = function(callback) {
-		var buildMarkup, buildFriendMarkup, aggregateFriends;
+		var buildMarkup, buildFriendMarkup;
 		log("buildFriendSelector");
 
 		if (!FB) {
@@ -420,7 +420,7 @@ var TDFriendSelector = (function(module, $) {
 		// Check that the user is logged in to Facebook
 		FB.getLoginStatus(function(response) {
 			if (response.status === 'connected') {
-				// Load Facebook friends
+				// Load Facebook friends via customizable FQL query
 	            FB.api({
 	                method: 'fql.multiquery',
 	                queries: {
@@ -439,7 +439,7 @@ var TDFriendSelector = (function(module, $) {
 	                    setFriends(response.data);
 						// Build the markup
 						buildMarkup();
-						// Call the callback
+						// Call the callback with the number of friends returned
 						if (typeof callback === 'function') { callback(response.data.length); }
 	                }
 	            });
@@ -449,13 +449,21 @@ var TDFriendSelector = (function(module, $) {
 			}
 		});
 
-        aggregateFriends = function(response) {
-            var profiles = _.find(response, function(obj){ return obj.name === 'profiles'; });
+		// Aggregate the friends from the FQL result set to our object format
+        var aggregateFriends = function(response) {
+            var profiles;
 
-            response.data = [];
+			response.data = [];
+
+            if(response) {
+            	$.each(response, function(key, val) {
+            		if(val.name && val.name === 'profiles')
+            			profiles = val.fql_result_set;
+            	});
+            }
 
             if(profiles) {
-                $.each(profiles.fql_result_set, function(key, user) {
+                $.each(profiles, function(key, user) {
                     response.data.push(user);
                 });
             }
