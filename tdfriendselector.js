@@ -1,4 +1,4 @@
-/*jslint devel: true, bitwise: false, undef: false, browser: true, continue: false, debug: false, eqeq: false, es5: false, type: false, evil: false, vars: false, forin: false, white: true, newcap: false, nomen: true, plusplus: false, regexp: true, sloppy: true */
+﻿/*jslint devel: true, bitwise: false, undef: false, browser: true, continue: false, debug: false, eqeq: false, es5: false, type: false, evil: false, vars: false, forin: false, white: true, newcap: false, nomen: true, plusplus: false, regexp: true, sloppy: true */
 /*globals jQuery, FB */
 
 /*!
@@ -106,7 +106,8 @@ var TDFriendSelector = (function(module, $) {
 	 */
 	newInstance = function(options) {
 		// Public functions
-		var showFriendSelector, hideFriendSelector, getselectedFriendIds, setDisabledFriendIds, filterFriends, reset,
+		var showFriendSelector, hideFriendSelector, getselectedFriendIds, setDisabledFriendIds, filterFriends, reset, setselectedFriendIds,
+
 
 		// Private variables
 		instanceSettings, selectedFriendIds = [], disabledFriendIds = [], numFilteredFriends = 0,
@@ -182,6 +183,15 @@ var TDFriendSelector = (function(module, $) {
 
 		getselectedFriendIds = function() {
 			return selectedFriendIds;
+		};
+
+		setselectedFriendIds = function (input) {
+			var i, friends;
+			friends = input.split();
+			for (i = 0, len = friends.length; i < len; i += 1) {
+				selectedFriendIds.push(friends[i]);
+			}
+			return;
 		};
 
 		/**
@@ -380,6 +390,7 @@ var TDFriendSelector = (function(module, $) {
 			showFriendSelector   : showFriendSelector,
 			hideFriendSelector   : hideFriendSelector,
 			getselectedFriendIds : getselectedFriendIds,
+			setselectedFriendIds : setselectedFriendIds,
 			setDisabledFriendIds : setDisabledFriendIds,
 			filterFriends        : filterFriends,
 			reset                : reset
