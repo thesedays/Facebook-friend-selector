@@ -6,7 +6,7 @@ window.fbAsyncInit = function () {
 	FB.init({appId: '172102396182433', status: true, cookie: false, xfbml: false, oauth: true});
 
 	$(document).ready(function () {
-		var selector1, selector2, logActivity, callbackFriendSelected, callbackFriendUnselected, callbackMaxSelection, callbackSubmit;
+		var selector1, selector2, selector3, logActivity, callbackFriendSelected, callbackFriendUnselected, callbackMaxSelection, callbackSubmit;
 
 		// When a friend is selected, log their name and ID
 		callbackFriendSelected = function(friendId) {
@@ -42,7 +42,8 @@ window.fbAsyncInit = function () {
 			callbackFriendSelected   : callbackFriendSelected,
 			callbackFriendUnselected : callbackFriendUnselected,
 			callbackMaxSelection     : callbackMaxSelection,
-			callbackSubmit           : callbackSubmit
+			callbackSubmit           : callbackSubmit,
+			maxSelection             : 4
 		});
 		selector2 = TDFriendSelector.newInstance({
 			callbackFriendSelected   : callbackFriendSelected,
@@ -52,6 +53,12 @@ window.fbAsyncInit = function () {
 			maxSelection             : 1,
 			friendsPerPage           : 5,
 			autoDeselection          : true
+		});
+		selector3 = TDFriendSelector.newInstance({
+			callbackFriendSelected   : callbackFriendSelected,
+			callbackFriendUnselected : callbackFriendUnselected,
+			callbackMaxSelection     : callbackMaxSelection,
+			callbackSubmit           : callbackSubmit
 		});
 
 		FB.getLoginStatus(function(response) {
@@ -89,6 +96,10 @@ window.fbAsyncInit = function () {
 		$("#btnSelect2").click(function (e) {
 			e.preventDefault();
 			selector2.showFriendSelector();
+		});
+		$("#btnSelect3").click(function (e) {
+			e.preventDefault();
+			selector3.showFriendSelector();
 		});
 
 		logActivity = function (message) {

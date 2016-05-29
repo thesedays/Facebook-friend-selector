@@ -121,7 +121,7 @@ var TDFriendSelector = (function(module, $) {
 
 		// Default settings
 		instanceSettings = {
-			maxSelection             : 4,
+			maxSelection             : false, // Give a number to restrict the number of possible friend selections
 			friendsPerPage           : 10,
 			autoDeselection          : false, // Allow the user to keep on selecting once they reach maxSelection, and just deselect the first selected friend
 			filterCharacters         : 1, // Set to 3 if you would like the filter to only run after the user has typed 3 or more chars
@@ -145,10 +145,14 @@ var TDFriendSelector = (function(module, $) {
 			var i, len;
 			log('TDFriendSelector - newInstance - showFriendSelector');
 			if (!$friends) {
-				return buildFriendSelector(function() {
+				return buildFriendSelector(function(noffriends) {
+					if(!instanceSettings.maxSelection)
+						instanceSettings.maxSelection = noffriends;
 					showFriendSelector(callback);
 				});
 			} else {
+				if(!instanceSettings.maxSelection)
+					instanceSettings.maxSelection = getFriends().length;
 				bindEvents();
 				// Update classnames to represent the selections for this instance
 				$friends.removeClass(settings.friendSelectedClass + ' ' + settings.friendDisabledClass + ' ' + settings.friendFilteredClass);
@@ -416,24 +420,54 @@ var TDFriendSelector = (function(module, $) {
 		// Check that the user is logged in to Facebook
 		FB.getLoginStatus(function(response) {
 			if (response.status === 'connected') {
-				// Load Facebook friends
-				FB.api('/me/friends?fields=id,name', function(response) {
-					if (response.data) {
-						setFriends(response.data);
+				// Load Facebook friends via customizable FQL query
+	            FB.api({
+	                method: 'fql.multiquery',
+	                queries: {
+	                    'friends':'SELECT uid2 FROM friend WHERE uid1 = me()',
+	                    'profiles':'SELECT id, name FROM profile WHERE id IN (SELECT uid2 FROM #friends)'
+	                }
+	            }, function(response) {
+	                if(!response || response.error_msg) {
+	                    if(response) 
+	                    	log('TDFriendSelector - buildFriendSelector - ' + response.error_msg);
+	                    else 
+	                        log('TDFriendSelector - buildFriendSelector - No friends returned');
+	                }
+	                else {
+	                    aggregateFriends(response);
+	                    setFriends(response.data);
 						// Build the markup
 						buildMarkup();
-						// Call the callback
-						if (typeof callback === 'function') { callback(); }
-					} else {
-						log('TDFriendSelector - buildFriendSelector - No friends returned');
-						return false;
-					}
-				});
+						// Call the callback with the number of friends returned
+						if (typeof callback === 'function') { callback(response.data.length); }
+	                }
+	            });
 			} else {
 				log('TDFriendSelector - buildFriendSelector - User is not logged in to Facebook');
 				return false;
 			}
 		});
+
+		// Aggregate the friends from the FQL result set to our object format
+        var aggregateFriends = function(response) {
+            var profiles;
+
+			response.data = [];
+
+            if(response) {
+            	$.each(response, function(key, val) {
+            		if(val.name && val.name === 'profiles')
+            			profiles = val.fql_result_set;
+            	});
+            }
+
+            if(profiles) {
+                $.each(profiles, function(key, user) {
+                    response.data.push(user);
+                });
+            }
+        };
 
 		// Build the markup of the friend selector
 		buildMarkup = function() {
