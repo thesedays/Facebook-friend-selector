@@ -3,7 +3,9 @@
 
 window.fbAsyncInit = function () {
 
-	FB.init({appId: '172102396182433', status: true, cookie: false, xfbml: false, oauth: true});
+	var m = decodeURIComponent(window.location.hash).match(/^#(\d+)$/);
+	var appIdParam = m ? m[1] : '172102396182433';
+	FB.init({appId: appIdParam, status: true, cookie: false, xfbml: false, oauth: true});
 
 	$(document).ready(function () {
 		var selector1, selector2, logActivity, callbackFriendSelected, callbackFriendUnselected, callbackMaxSelection, callbackSubmit;
