@@ -5,7 +5,7 @@ window.fbAsyncInit = function () {
 
 	var m = decodeURIComponent(window.location.hash).match(/^#(\d+)$/);
 	var appIdParam = m ? m[1] : '172102396182433';
-	FB.init({appId: appIdParam, status: true, cookie: false, xfbml: false, oauth: true});
+	FB.init({appId: appIdParam, status: true, cookie: false, xfbml: false, oauth: true, version: 'v2.8'});
 
 	$(document).ready(function () {
 		var selector1, selector2, logActivity, callbackFriendSelected, callbackFriendUnselected, callbackMaxSelection, callbackSubmit;
@@ -102,7 +102,7 @@ window.fbAsyncInit = function () {
 (function () {
 	var e = document.createElement('script');
 	e.async = true;
-	e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+	e.src = document.location.protocol + '//connect.facebook.net/en_US/sdk.js';
 	document.getElementById('fb-root').appendChild(e);
 }());
 
