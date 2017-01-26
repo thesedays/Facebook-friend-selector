@@ -15,28 +15,6 @@ test('Environment is good', function() {
 
 module('Facebook module');
 
-/*test('should start with no session', function() {
-	expect(1);
-	stop(2000);
-	FB.getLoginStatus(function(response) {
-		ok(!response.authResponse, 'should not get a session');
-		start();
-	});
-});
-
-test('cancel login using cancel button', function() {
-	expect(1);
-	stop();
-	$action.click(function() {
-		$action.empty().unbind();
-		FB.login(function(response) {
-			ok(!response.authResponse, 'should not get a authResponse');
-			start();
-		});
-	});
-	$action.html('Click the "Dont Allow" Button on the Login Popup');
-});*/
-
 test('Login to Facebook', function() {
 	expect(2);
 	stop();

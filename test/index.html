@@ -47,10 +47,12 @@
 		</div>
 	</div>
 
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-	<script src="//connect.facebook.net/en_US/all.js"></script>
+	<script src="//code.jquery.com/jquery-latest.min.js"></script>
+	<script src="//connect.facebook.net/en_US/sdk.js"></script>
 	<script>
-		FB.init({appId: '172102396182433', status: true, cookie: false, xfbml: false, oauth: true});
+		var m = decodeURIComponent(window.location.hash).match(/^#(\d+)$/);
+		var appIdParam = m ? m[1] : '172102396182433';
+		FB.init({appId: appIdParam, status: true, cookie: false, xfbml: false, oauth: true, version: 'v2.8'});
 	</script>
 	<script src="../tdfriendselector.js"></script>
 

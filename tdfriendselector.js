@@ -416,18 +416,22 @@ var TDFriendSelector = (function(module, $) {
 		// Check that the user is logged in to Facebook
 		FB.getLoginStatus(function(response) {
 			if (response.status === 'connected') {
-				// Load Facebook friends
-				FB.api('/me/friends?fields=id,name', function(response) {
-					if (response.data) {
-						setFriends(response.data);
-						// Build the markup
-						buildMarkup();
-						// Call the callback
-						if (typeof callback === 'function') { callback(); }
-					} else {
-						log('TDFriendSelector - buildFriendSelector - No friends returned');
-						return false;
-					}
+				// Load Facebook friends' count
+				FB.api('/me/friends?limit=0', function(response) {
+					var friendsCount=response.summary.total_count;
+					// Load Facebook friends
+					FB.api('/me/friends?fields=id,name&limit='+friendsCount, function(response) {
+						if (response.data) {
+							setFriends(response.data);
+							// Build the markup
+							buildMarkup();
+							// Call the callback
+							if (typeof callback === 'function') { callback(); }
+						} else {
+							log('TDFriendSelector - buildFriendSelector - No friends returned');
+							return false;
+						}
+					});
 				});
 			} else {
 				log('TDFriendSelector - buildFriendSelector - User is not logged in to Facebook');
